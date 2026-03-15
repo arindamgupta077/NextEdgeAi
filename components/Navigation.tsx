@@ -157,7 +157,7 @@ export default function Navigation() {
                 style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)' }} />
             </div>
 
-            <div className="relative flex flex-col items-center gap-6 w-full px-10">
+            <div className="relative flex flex-col items-center gap-5 w-full px-6 sm:px-10">
               {navLinks.map((link, i) => (
                 <motion.button
                   key={link.label}
@@ -165,8 +165,8 @@ export default function Navigation() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => scrollToSection(link.href)}
-                  className="w-full text-center text-4xl font-light text-gray-300 hover:text-white
-                             transition-colors tracking-wide py-2 border-b border-white/5"
+                  className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 hover:text-white
+                             transition-colors tracking-wide py-3 border-b border-white/5"
                 >
                   {link.label}
                 </motion.button>
@@ -179,8 +179,8 @@ export default function Navigation() {
                   setMenuOpen(false)
                   window.dispatchEvent(new CustomEvent('open-contact-modal'))
                 }}
-                className="mt-6 px-10 py-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white
-                           rounded-full text-xl font-medium"
+                className="mt-6 px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white
+                           rounded-full text-lg sm:text-xl font-medium"
               >
                 Start a Project
               </motion.button>

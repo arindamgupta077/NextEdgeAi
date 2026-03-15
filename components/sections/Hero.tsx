@@ -188,7 +188,7 @@ export default function Hero() {
       {/* ── Content ── */}
       <motion.div
         style={{ y: yHeading, opacity }}
-        className="relative z-10 text-center px-6 max-w-6xl mx-auto pt-24"
+        className="relative z-10 text-center px-4 sm:px-6 max-w-6xl mx-auto pt-20 sm:pt-24"
       >
         {/* Studio tag */}
         <div className="hero-tag opacity-0 inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-light mb-10 text-xs uppercase tracking-[0.2em] text-cyan-400">
@@ -198,26 +198,26 @@ export default function Hero() {
 
         {/* Headline */}
         <div className="overflow-hidden mb-2">
-          <h1 className="hero-line-1 opacity-0 text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
+          <h1 className="hero-line-1 opacity-0 text-[1.85rem] sm:text-[2.8rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
                           font-black leading-none tracking-tight">
             <span className="text-gradient-hero">THE FUTURE</span>
           </h1>
         </div>
         <div className="overflow-hidden mb-2">
-          <h1 className="hero-line-2 opacity-0 text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
+          <h1 className="hero-line-2 opacity-0 text-[1.85rem] sm:text-[2.8rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
                           font-black leading-none tracking-tight text-white">
             OF CINEMA IS
           </h1>
         </div>
         <div className="overflow-hidden mb-10">
-          <h1 className="hero-line-3 opacity-0 text-[3.5rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
+          <h1 className="hero-line-3 opacity-0 text-[1.85rem] sm:text-[2.8rem] md:text-[5.5rem] lg:text-[7rem] xl:text-[8rem]
                           font-black leading-none tracking-tight">
             <span className="text-gradient">INTELLIGENT</span>
           </h1>
         </div>
 
         {/* Sub */}
-        <p className="hero-sub opacity-0 max-w-2xl mx-auto text-lg md:text-xl text-gray-400 leading-relaxed mb-12">
+        <p className="hero-sub opacity-0 max-w-2xl mx-auto text-base sm:text-lg md:text-xl text-gray-400 leading-relaxed mb-8 sm:mb-12">
           We merge the power of artificial intelligence with cinematic artistry to create
           films, campaigns, and visual universes that captivate, convert, and endure.
         </p>
@@ -227,7 +227,7 @@ export default function Hero() {
           <button
             ref={btnRef1}
             onClick={scrollToContact}
-            className="magnetic-btn cursor-none group relative px-8 py-4 rounded-full text-base font-semibold overflow-hidden transition-transform duration-300"
+            className="magnetic-btn cursor-none group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base font-semibold overflow-hidden transition-transform duration-300"
           >
             <span className="absolute inset-0 bg-gradient-to-r from-cyan-500 via-blue-500 to-indigo-500 rounded-full" />
             <span className="absolute inset-0 bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -243,7 +243,7 @@ export default function Hero() {
           <button
             ref={btnRef2}
             onClick={scrollToPortfolio}
-            className="magnetic-btn cursor-none group relative px-8 py-4 rounded-full text-base font-medium overflow-hidden transition-transform duration-300"
+            className="magnetic-btn cursor-none group relative px-6 sm:px-8 py-3 sm:py-4 rounded-full text-base font-medium overflow-hidden transition-transform duration-300"
           >
             <span className="absolute inset-0 rounded-full border border-white/20 group-hover:border-white/40 transition-colors" />
             <span className="absolute inset-0 rounded-full bg-white/0 group-hover:bg-white/5 transition-colors" />
@@ -258,7 +258,7 @@ export default function Hero() {
         </div>
 
         {/* Mini stats */}
-        <div className="hero-stats flex flex-wrap items-center justify-center gap-8 md:gap-14">
+        <div className="hero-stats flex flex-wrap items-center justify-center gap-4 sm:gap-8 md:gap-14">
           {[
             { value: '500+', label: 'Projects Delivered' },
             { value: '98%',  label: 'Client Satisfaction' },

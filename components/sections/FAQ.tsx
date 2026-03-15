@@ -83,7 +83,7 @@ export default function FAQ() {
               <span className="w-1 h-1 rounded-full bg-cyan-400" />
               FAQ
             </div>
-            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6">
+            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-6">
               Questions<br/>
               <span className="text-gradient">Answered.</span>
             </h2>

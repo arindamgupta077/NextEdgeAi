@@ -120,11 +120,11 @@ export default function Contact() {
             <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
             New Projects Open
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             Let's Build Something<br/>
             <span className="text-gradient">Extraordinary</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 text-lg">
+          <p className="max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
             Tell us about your vision. We'll respond within 24 hours with a tailored proposal.
           </p>
         </div>

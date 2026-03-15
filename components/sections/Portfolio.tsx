@@ -169,7 +169,7 @@ export default function Portfolio() {
               <span className="w-1 h-1 rounded-full bg-emerald-400" />
               Featured Work
             </div>
-            <h2 className="text-4xl md:text-6xl font-black tracking-tight">
+            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
               Work That<br/>
               <span className="text-gradient">Speaks Itself</span>
             </h2>
@@ -185,7 +185,7 @@ export default function Portfolio() {
             <button
               key={cat}
               onClick={() => setFilter(cat)}
-              className={`cursor-none px-4 py-1.5 rounded-full text-xs font-medium border transition-all duration-300 ${
+              className={`cursor-none px-4 py-2 rounded-full text-xs font-medium border transition-all duration-300 ${
                 filter === cat
                   ? 'bg-white text-black border-white'
                   : 'text-gray-500 border-white/10 hover:text-white hover:border-white/25'
@@ -197,7 +197,7 @@ export default function Portfolio() {
         </div>
 
         {/* Project grid */}
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[280px] gap-5">
+        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[220px] sm:auto-rows-[260px] lg:auto-rows-[280px] gap-4 sm:gap-5">
           <AnimatePresence>
             {visible.map((project) => (
               <motion.div

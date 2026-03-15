@@ -104,11 +104,11 @@ export default function Testimonials() {
             <span className="w-1 h-1 rounded-full bg-rose-400" />
             Social Proof
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             What Our Clients<br/>
             <span className="text-gradient">Have to Say</span>
           </h2>
-          <p className="max-w-md mx-auto text-gray-400 text-lg">
+          <p className="max-w-md mx-auto text-gray-400 text-base sm:text-lg">
             Real results. Real relationships. Real stories from the brands we've helped transform.
           </p>
         </div>
@@ -120,7 +120,7 @@ export default function Testimonials() {
             {TESTIMONIALS.slice(0, 3).map((t) => (
               <div
                 key={t.name}
-                className="testimonial-card group relative rounded-2xl p-7 border border-white/6 glass-light card-hover overflow-hidden"
+                className="testimonial-card group relative rounded-2xl p-5 sm:p-7 border border-white/6 glass-light card-hover overflow-hidden"
               >
                 {/* Glow accent */}
                 <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl opacity-60"
@@ -150,7 +150,7 @@ export default function Testimonials() {
             {TESTIMONIALS.slice(3).map((t) => (
               <div
                 key={t.name}
-                className="testimonial-card group relative rounded-2xl p-7 border border-white/6 glass-light card-hover overflow-hidden"
+                className="testimonial-card group relative rounded-2xl p-5 sm:p-7 border border-white/6 glass-light card-hover overflow-hidden"
               >
                 <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl opacity-60"
                   style={{ background: `linear-gradient(90deg, ${t.accent}, transparent)` }} />

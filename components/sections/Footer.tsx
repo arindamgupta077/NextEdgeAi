@@ -101,7 +101,7 @@ export default function Footer() {
       <div className="relative z-10">
         {/* CTA Banner */}
         <div className="border-b border-white/5">
-          <div className="max-w-7xl mx-auto px-6 py-16 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -109,13 +109,13 @@ export default function Footer() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <p className="text-xs uppercase tracking-[0.25em] text-gray-600 mb-3">Ready to create?</p>
-              <h2 className="text-4xl md:text-6xl font-black text-white mb-8 leading-tight">
+              <h2 className="text-2xl sm:text-4xl md:text-6xl font-black text-white mb-6 sm:mb-8 leading-tight">
                 Your Story Is Waiting<br/>
                 <span className="text-gradient">To Be Told.</span>
               </h2>
               <button
                 onClick={() => scrollTo('contact')}
-                className="cursor-none group inline-flex items-center gap-3 px-8 py-4 rounded-full
+                className="cursor-none group inline-flex items-center gap-3 px-6 sm:px-8 py-3 sm:py-4 rounded-full
                            bg-gradient-to-r from-cyan-500 to-indigo-500 text-white font-semibold text-base
                            hover:shadow-[0_0_40px_rgba(34,211,238,0.3)] transition-shadow duration-500"
               >
@@ -129,8 +129,8 @@ export default function Footer() {
         </div>
 
         {/* Main footer grid */}
-        <div className="max-w-7xl mx-auto px-6 pt-16 pb-10">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-10 mb-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 sm:pt-16 pb-8 sm:pb-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-10 mb-16">
             {/* Brand column */}
             <div className="col-span-2">
               {/* Logo */}

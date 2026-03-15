@@ -194,12 +194,12 @@ export default function Services() {
 
       <div className="container-narrow relative z-10">
         {/* Heading */}
-        <div className="services-heading text-center mb-20">
+        <div className="services-heading text-center mb-12 sm:mb-20">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
             <span className="w-1 h-1 rounded-full bg-cyan-400" />
             What We Create
           </div>
-          <h2 className="text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
             Services Built for<br/>
             <span className="text-gradient">The Next Era</span>
           </h2>
@@ -214,7 +214,7 @@ export default function Services() {
           {displayServices.map((svc) => (
             <div
               key={svc.id != null ? String(svc.id) : svc.title}
-              className={`service-card group relative rounded-2xl p-6 cursor-none
+              className={`service-card group relative rounded-2xl p-4 sm:p-6 cursor-none
                           border border-white/6 ${svc.border}
                           bg-gradient-to-br ${svc.color}
                           transition-all duration-400 card-hover overflow-hidden`}

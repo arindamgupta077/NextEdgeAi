@@ -171,10 +171,10 @@ export default function AISuite() {
             <span className="w-1 h-1 rounded-full bg-indigo-400" />
             Technology
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             The AI Production <span className="text-gradient">Suite</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 text-lg">
+          <p className="max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
             Four interconnected AI engines that cover every stage of cinematic creation —
             from the first word to the final frame.
           </p>

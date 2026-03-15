@@ -57,7 +57,7 @@ export default function ContactModal() {
             >
               {/* Header */}
               <div
-                className="sticky top-0 z-10 flex items-center justify-between px-8 pt-7 pb-4 border-b border-white/5"
+                className="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-8 pt-5 sm:pt-7 pb-4 border-b border-white/5"
                 style={{ background: 'radial-gradient(ellipse at 50% 0%, #0d1a3e 0%, #06060c 70%)' }}
               >
                 <div>
@@ -79,7 +79,7 @@ export default function ContactModal() {
               </div>
 
               {/* Form */}
-              <div className="px-8 pb-8 pt-6">
+              <div className="px-4 sm:px-8 pb-6 sm:pb-8 pt-4 sm:pt-6">
                 <ContactForm />
               </div>
             </div>

@@ -88,7 +88,7 @@ body {
     text-shadow: 0 0 30px rgba(34, 211, 238, 0.5);
   }
   .section-padding {
-    @apply py-24 md:py-32 px-6 md:px-8 lg:px-12;
+    @apply py-16 md:py-24 lg:py-32 px-4 md:px-8 lg:px-12;
   }
   .container-narrow {
     @apply max-w-7xl mx-auto;
@@ -156,9 +156,11 @@ body {
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.card-hover:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(34,211,238,0.15);
+@media (hover: hover) {
+  .card-hover:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(34,211,238,0.15);
+  }
 }
 
 /* ─── Button Glow Effect ─────────────────────────────────────────────── */
@@ -273,15 +275,21 @@ select.form-input option {
 }
 
 /* ─── Portfolio Card Overlay ─────────────────────────────────────────── */
+/* On touch devices the overlay is always visible; on desktop it fades in on hover */
 .portfolio-overlay {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.4s ease;
 }
-.portfolio-card:hover .portfolio-overlay {
-  opacity: 1;
-}
-.portfolio-card:hover .portfolio-img {
-  transform: scale(1.06);
+@media (hover: hover) {
+  .portfolio-overlay {
+    opacity: 0;
+  }
+  .portfolio-card:hover .portfolio-overlay {
+    opacity: 1;
+  }
+  .portfolio-card:hover .portfolio-img {
+    transform: scale(1.06);
+  }
 }
 .portfolio-img {
   transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
@@ -289,10 +297,15 @@ select.form-input option {
 
 /* ─── Testimonial Card ───────────────────────────────────────────────── */
 .quote-mark {
-  font-size: 5rem;
+  font-size: 3rem;
   line-height: 1;
   color: rgba(34,211,238,0.15);
   font-family: Georgia, serif;
+}
+@media (min-width: 640px) {
+  .quote-mark {
+    font-size: 5rem;
+  }
 }
 
 /* ─── Line Clamp ─────────────────────────────────────────────────────── */

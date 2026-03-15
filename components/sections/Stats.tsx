@@ -62,7 +62,7 @@ function AnimatedCounter({ end, suffix, color, started }: {
   }, [started, end])
 
   return (
-    <span className={`text-6xl md:text-7xl lg:text-8xl font-black tabular-nums ${color}`}>
+    <span className={`text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tabular-nums ${color}`}>
       {count}{suffix}
     </span>
   )
@@ -116,7 +116,7 @@ export default function Stats() {
             <span className="w-1 h-1 rounded-full bg-amber-400" />
             By the Numbers
           </div>
-          <h2 className="text-4xl md:text-6xl font-black tracking-tight">
+          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
             Numbers That<br/>
             <span className="text-gradient">Define Our Impact</span>
           </h2>
@@ -127,7 +127,7 @@ export default function Stats() {
           {STATS.map((s, i) => (
             <div
               key={s.label}
-              className={`stat-block relative rounded-3xl p-8 border border-white/6 overflow-hidden card-hover`}
+              className={`stat-block relative rounded-3xl p-5 sm:p-8 border border-white/6 overflow-hidden card-hover`}
               style={{ background: `linear-gradient(135deg, ${s.bg.split(' ')[1].replace('from-','').replace('/10','')}18, transparent)` }}
             >
               {/* Gradient fill */}
