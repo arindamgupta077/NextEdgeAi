@@ -1,0 +1,15 @@
+# ================================================================
+# Netlify configuration for NextEdgeAI (Next.js 14 App Router)
+# ================================================================
+
+[build]
+  command   = "npm run build"
+  publish   = ".next"
+
+[build.environment]
+  NODE_VERSION = "20"
+  NPM_VERSION  = "10"
+
+# Essential Next.js plugin — handles SSR, Edge Middleware, and ISR
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
