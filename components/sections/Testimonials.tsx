@@ -75,14 +75,14 @@ export default function Testimonials() {
       gsap.fromTo('.testimonials-heading',
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.testimonials-heading', start: 'top 85%' } }
+          scrollTrigger: { trigger: '.testimonials-heading', start: 'top 95%' } }
       )
       gsap.fromTo('.testimonial-card',
         { opacity: 0, y: 50, scale: 0.95 },
         {
           opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out',
           stagger: 0.1,
-          scrollTrigger: { trigger: '.testimonials-grid', start: 'top 80%' },
+          scrollTrigger: { trigger: '.testimonials-grid', start: 'top 95%' },
         }
       )
     }, sectionRef)

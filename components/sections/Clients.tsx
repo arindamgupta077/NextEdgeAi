@@ -69,7 +69,7 @@ export default function Clients() {
       gsap.fromTo('.clients-heading',
         { opacity: 0, y: 40 },
         { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.clients-heading', start: 'top 85%' } }
+          scrollTrigger: { trigger: '.clients-heading', start: 'top 95%' } }
       )
     }, sectionRef)
     return () => ctx.revert()

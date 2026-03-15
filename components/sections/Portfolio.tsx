@@ -123,11 +123,22 @@ export default function Portfolio() {
               thumbnail_url: p.thumbnail_url,
             }))
           )
-          // Grid height changed — recalculate all ScrollTrigger positions so
-          // sections below the portfolio don't animate too late.
-          setTimeout(() => ScrollTrigger.refresh(), 100)
         }
       })
+  }, [])
+
+  // ResizeObserver: whenever the section's height changes (Supabase returned
+  // fewer/more projects than the 6 hardcoded defaults), refresh all
+  // ScrollTrigger positions so sections below animate at the correct time.
+  // This is network-timing-agnostic — fires exactly when the DOM has settled.
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      ScrollTrigger.refresh()
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
   }, [])
 
   const ALL_CATS = ['All', ...Array.from(new Set(projects.map(p => p.category)))]

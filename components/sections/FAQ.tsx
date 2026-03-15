@@ -55,14 +55,14 @@ export default function FAQ() {
       gsap.fromTo('.faq-heading',
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.faq-heading', start: 'top 85%' } }
+          scrollTrigger: { trigger: '.faq-heading', start: 'top 95%' } }
       )
       gsap.fromTo('.faq-item',
         { opacity: 0, x: -30 },
         {
           opacity: 1, x: 0, duration: 0.6, ease: 'power3.out',
           stagger: 0.07,
-          scrollTrigger: { trigger: '.faq-list', start: 'top 80%' },
+          scrollTrigger: { trigger: '.faq-list', start: 'top 95%' },
         }
       )
     }, sectionRef)

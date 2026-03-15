@@ -76,20 +76,20 @@ export default function Stats() {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start:   'top 75%',
+        start:   'top 95%',
         onEnter: () => setStarted(true),
       })
       gsap.fromTo('.stats-heading',
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.stats-heading', start: 'top 85%' } }
+          scrollTrigger: { trigger: '.stats-heading', start: 'top 95%' } }
       )
       gsap.fromTo('.stat-block',
         { opacity: 0, y: 50, scale: 0.92 },
         {
           opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out',
           stagger: 0.12,
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 80%' },
+          scrollTrigger: { trigger: '.stats-grid', start: 'top 95%' },
         }
       )
     }, sectionRef)

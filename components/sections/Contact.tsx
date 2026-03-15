@@ -88,17 +88,17 @@ export default function Contact() {
       gsap.fromTo('.contact-heading',
         { opacity: 0, y: 50 },
         { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-heading', start: 'top 85%' } }
+          scrollTrigger: { trigger: '.contact-heading', start: 'top 95%' } }
       )
       gsap.fromTo('.contact-info',
         { opacity: 0, x: -50 },
         { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-grid', start: 'top 80%' } }
+          scrollTrigger: { trigger: '.contact-grid', start: 'top 95%' } }
       )
       gsap.fromTo('.contact-form-wrap',
         { opacity: 0, x: 50 },
         { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-grid', start: 'top 80%' } }
+          scrollTrigger: { trigger: '.contact-grid', start: 'top 95%' } }
       )
     }, sectionRef)
     return () => ctx.revert()
