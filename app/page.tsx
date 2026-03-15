@@ -13,6 +13,7 @@ import Testimonials  from '@/components/sections/Testimonials'
 import FAQ           from '@/components/sections/FAQ'
 import Contact       from '@/components/sections/Contact'
 import Footer        from '@/components/sections/Footer'
+import ContactModal  from '@/components/ContactModal'
 
 export default function Home() {
   // Initialise Lenis smooth scroll
@@ -54,6 +55,7 @@ export default function Home() {
       <FAQ />
       <Contact />
       <Footer />
+      <ContactModal />
     </main>
   )
 }

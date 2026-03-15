@@ -232,6 +232,14 @@ body {
 .form-input::placeholder {
   color: rgba(255,255,255,0.3);
 }
+select.form-input {
+  color-scheme: dark;
+  background-color: #13131f;
+}
+select.form-input option {
+  background-color: #13131f;
+  color: #ffffff;
+}
 
 /* ─── Reveal Animations (used by GSAP) ───────────────────────────────── */
 .reveal-hidden {

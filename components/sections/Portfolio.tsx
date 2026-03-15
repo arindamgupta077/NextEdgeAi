@@ -123,6 +123,9 @@ export default function Portfolio() {
               thumbnail_url: p.thumbnail_url,
             }))
           )
+          // Grid height changed — recalculate all ScrollTrigger positions so
+          // sections below the portfolio don't animate too late.
+          setTimeout(() => ScrollTrigger.refresh(), 100)
         }
       })
   }, [])
@@ -133,9 +136,9 @@ export default function Portfolio() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       gsap.fromTo('.portfolio-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.portfolio-heading', start: 'top 85%' } }
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+          scrollTrigger: { trigger: '.portfolio-heading', start: 'top 98%' } }
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -189,10 +192,11 @@ export default function Portfolio() {
               <motion.div
                 key={project.id}
                 layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.1 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className={`portfolio-card group relative rounded-2xl overflow-hidden cursor-none border border-white/6
                             bg-gradient-to-br ${project.gradient} ${project.span}`}
                 onClick={() => {

@@ -71,8 +71,8 @@ export default function AdminLoginPage() {
                 onChange={e => setEmail(e.target.value)}
                 required
                 autoComplete="email"
-                className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-3 text-sm text-white
-                           placeholder-white/20 outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10 transition"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white [color-scheme:dark]
+                           placeholder:text-white/30 outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10 transition"
                 placeholder="admin@nextedgeai.com"
               />
             </div>
@@ -87,8 +87,8 @@ export default function AdminLoginPage() {
                 onChange={e => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full bg-white/4 border border-white/8 rounded-xl px-4 py-3 text-sm text-white
-                           placeholder-white/20 outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10 transition"
+                className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white [color-scheme:dark]
+                           placeholder:text-white/30 outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10 transition"
                 placeholder="••••••••"
               />
             </div>

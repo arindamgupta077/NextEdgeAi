@@ -101,7 +101,7 @@ export default function Navigation() {
           {/* CTA */}
           <div className="hidden md:flex items-center gap-3">
             <button
-              onClick={() => scrollToSection('#contact')}
+              onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
               className="cursor-none group relative px-5 py-2.5 text-sm font-medium rounded-full overflow-hidden transition-all duration-300"
             >
               <span className="absolute inset-0 border border-cyan-400/40 rounded-full group-hover:border-cyan-400/80 transition-colors duration-300" />
@@ -175,7 +175,10 @@ export default function Navigation() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + navLinks.length * 0.07 }}
-                onClick={() => scrollToSection('#contact')}
+                onClick={() => {
+                  setMenuOpen(false)
+                  window.dispatchEvent(new CustomEvent('open-contact-modal'))
+                }}
                 className="mt-6 px-10 py-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white
                            rounded-full text-xl font-medium"
               >
