@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 
 export default function AdminLoginPage() {
@@ -40,13 +41,14 @@ export default function AdminLoginPage() {
         {/* Logo */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2.5 mb-4">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                <path d="M10 2L18 7V13L10 18L2 13V7L10 2Z" fill="white" fillOpacity=".9"/>
-                <path d="M10 6L14 8.5V11.5L10 14L6 11.5V8.5L10 6Z" fill="white" fillOpacity=".4"/>
-              </svg>
-            </div>
-            <span className="text-white font-bold tracking-wide">NextEdgeAI</span>
+            <Image
+              src="/logo.png"
+              alt="NextEdgeAI Logo"
+              width={160}
+              height={50}
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </div>
           <h1 className="text-xl font-semibold text-white">Admin Portal</h1>
           <p className="text-sm text-gray-500 mt-1">Sign in to manage your site</p>
