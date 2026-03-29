@@ -88,6 +88,7 @@ export default function InquiriesPage() {
               <tr className="border-b border-white/5">
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium">Name</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden sm:table-cell">Email</th>
+                <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden md:table-cell">Mobile</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden md:table-cell">Type</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden md:table-cell">Budget</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium">Status</th>
@@ -106,6 +107,7 @@ export default function InquiriesPage() {
                     {inq.company && <span className="block text-xs text-gray-600">{inq.company}</span>}
                   </td>
                   <td className="px-5 py-3.5 text-gray-400 hidden sm:table-cell">{inq.email}</td>
+                  <td className="px-5 py-3.5 text-gray-400 hidden md:table-cell">{inq.mobile ?? '—'}</td>
                   <td className="px-5 py-3.5 text-gray-500 hidden md:table-cell">{inq.project_type ?? '—'}</td>
                   <td className="px-5 py-3.5 text-gray-500 hidden md:table-cell">{inq.budget ?? '—'}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={inq.status} /></td>

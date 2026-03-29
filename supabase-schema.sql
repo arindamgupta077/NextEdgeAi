@@ -34,6 +34,7 @@ create table if not exists contact_submissions (
   id           uuid        default uuid_generate_v4() primary key,
   name         text        not null,
   email        text        not null,
+  mobile       text,
   company      text,
   project_type text,
   budget       text,
@@ -144,11 +145,18 @@ create table if not exists services (
   description   text        not null default '',
   icon_name     text        not null default 'film',
   color_theme   text        not null default 'cyan',
+  image_url     text,
   display_order integer     not null default 0,
   is_active     boolean     not null default true,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()
 );
+
+-- If upgrading an existing deployment, run:
+-- alter table services add column if not exists image_url text;
+
+-- If upgrading an existing deployment, run:
+-- alter table contact_submissions add column if not exists mobile text;
 
 alter table services enable row level security;
 
@@ -165,3 +173,95 @@ create policy "services_auth_all"
 create trigger services_updated_at
   before update on services
   for each row execute function handle_updated_at();
+
+-- ----------------------------------------------------------------
+-- Storage bucket: service-images
+-- ----------------------------------------------------------------
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'service-images',
+  'service-images',
+  true,
+  10485760,   -- 10 MB
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']
+)
+on conflict (id) do nothing;
+
+create policy "service_images_public_read"
+  on storage.objects for select to anon
+  using (bucket_id = 'service-images');
+
+create policy "service_images_auth_insert"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'service-images');
+
+create policy "service_images_auth_update"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'service-images');
+
+create policy "service_images_auth_delete"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'service-images');
+
+-- ----------------------------------------------------------------
+-- TABLE: clients
+-- Brands shown in the "Trusted by Forward-Thinking Brands" section.
+-- ----------------------------------------------------------------
+create table if not exists clients (
+  id            uuid        default uuid_generate_v4() primary key,
+  name          text        not null,
+  color         text        not null default '#22d3ee',
+  logo_url      text,
+  display_order integer     not null default 0,
+  is_active     boolean     not null default true,
+  created_at    timestamptz not null default now(),
+  updated_at    timestamptz not null default now()
+);
+
+-- If upgrading an existing deployment, run:
+-- alter table clients add column if not exists logo_url text;
+
+alter table clients enable row level security;
+
+-- Public: read active clients only
+create policy "clients_public_select"
+  on clients for select to anon
+  using (is_active = true);
+
+-- Authenticated: full access
+create policy "clients_auth_all"
+  on clients for all to authenticated
+  using (true) with check (true);
+
+create trigger clients_updated_at
+  before update on clients
+  for each row execute function handle_updated_at();
+
+-- ----------------------------------------------------------------
+-- Storage bucket: client-logos
+-- ----------------------------------------------------------------
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'client-logos',
+  'client-logos',
+  true,
+  5242880,   -- 5 MB
+  array['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif', 'image/svg+xml']
+)
+on conflict (id) do nothing;
+
+create policy "client_logos_public_read"
+  on storage.objects for select to anon
+  using (bucket_id = 'client-logos');
+
+create policy "client_logos_auth_insert"
+  on storage.objects for insert to authenticated
+  with check (bucket_id = 'client-logos');
+
+create policy "client_logos_auth_update"
+  on storage.objects for update to authenticated
+  using (bucket_id = 'client-logos');
+
+create policy "client_logos_auth_delete"
+  on storage.objects for delete to authenticated
+  using (bucket_id = 'client-logos');

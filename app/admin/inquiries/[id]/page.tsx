@@ -122,6 +122,7 @@ export default function InquiryDetailPage() {
             <h2 className="text-xs uppercase tracking-widest text-gray-600 font-medium mb-5">Inquiry Details</h2>
             <Field label="Name"          value={inquiry.name} />
             <Field label="Email"         value={inquiry.email} />
+            <Field label="Mobile"        value={inquiry.mobile} />
             <Field label="Company"       value={inquiry.company} />
             <Field label="Project Type"  value={inquiry.project_type} />
             <Field label="Budget"        value={inquiry.budget} />

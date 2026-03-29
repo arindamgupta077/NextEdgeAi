@@ -7,6 +7,106 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+const SCENE_IMAGES = ['/1.png', '/2.png', '/3.png', '/4.png']
+
+function VisualGenesisGrid() {
+  const [lightbox, setLightbox] = useState<number | null>(null)
+
+  return (
+    <>
+      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-950/60 to-[#0a0a18] border border-white/8">
+        <div className="absolute inset-0 grid grid-cols-2 gap-2 p-4">
+          {SCENE_IMAGES.map((src, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.12 }}
+              className="rounded-xl overflow-hidden relative cursor-pointer group"
+              onClick={() => setLightbox(i)}
+            >
+              <img
+                src={src}
+                alt={`Scene ${i + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors duration-300 flex items-center justify-center">
+                <svg className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+                </svg>
+              </div>
+              <span className="absolute bottom-1 left-1 text-[9px] text-white/60 uppercase tracking-wider bg-black/40 px-1 rounded">Scene {i + 1}</span>
+            </motion.div>
+          ))}
+        </div>
+        <div className="absolute bottom-4 left-4 glass-light rounded-xl px-3 py-2 text-xs text-gray-300">
+          <span className="text-indigo-400">●</span> Generating 4 variations...
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {lightbox !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-sm"
+            onClick={() => setLightbox(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.85, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ type: 'spring', damping: 22, stiffness: 260 }}
+              className="relative max-w-4xl w-full mx-4"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={SCENE_IMAGES[lightbox]}
+                alt={`Scene ${lightbox + 1}`}
+                className="w-full rounded-2xl shadow-2xl"
+              />
+              <span className="absolute bottom-4 left-4 text-xs text-white/60 uppercase tracking-wider bg-black/50 px-2 py-1 rounded-lg">
+                Scene {lightbox + 1}
+              </span>
+              {/* Prev / Next */}
+              {lightbox > 0 && (
+                <button
+                  onClick={() => setLightbox(lightbox - 1)}
+                  className="absolute left-[-3rem] top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+              )}
+              {lightbox < SCENE_IMAGES.length - 1 && (
+                <button
+                  onClick={() => setLightbox(lightbox + 1)}
+                  className="absolute right-[-3rem] top-1/2 -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+                >
+                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              )}
+              {/* Close */}
+              <button
+                onClick={() => setLightbox(null)}
+                className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors bg-black/50 rounded-full p-1"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  )
+}
+
 const FEATURES = [
   {
     id:      'script',
@@ -48,26 +148,7 @@ const FEATURES = [
     desc:    'Transform text prompts and mood boards into fully realised photorealistic environments. Our diffusion-based pipeline generates production-ready concept art, location references, and lighting studies at 10× the speed of traditional design.',
     bullets: ['Photorealistic concept art', 'Environment mood-boarding', 'Style-locked generation', 'Lighting & atmosphere control'],
     accent:  '#818cf8',
-    visual: (
-      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-950/60 to-[#0a0a18] border border-white/8">
-        <div className="absolute inset-0 grid grid-cols-2 gap-2 p-4">
-          {['from-violet-900/60 to-indigo-900/40', 'from-blue-900/60 to-cyan-900/40',
-            'from-slate-900/60 to-blue-900/40', 'from-indigo-900/60 to-purple-900/40'].map((gradient, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.12 }}
-              className={`rounded-xl bg-gradient-to-br ${gradient} flex items-end p-2`}
-            >
-              <span className="text-[9px] text-white/40 uppercase tracking-wider">Scene {i + 1}</span>
-            </motion.div>
-          ))}
-        </div>
-        <div className="absolute bottom-4 left-4 glass-light rounded-xl px-3 py-2 text-xs text-gray-300">
-          <span className="text-indigo-400">●</span> Generating 4 variations...
-        </div>
-      </div>
-    ),
+    visual: <VisualGenesisGrid />,
   },
   {
     id:      'neural',

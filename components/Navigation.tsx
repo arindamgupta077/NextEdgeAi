@@ -2,17 +2,21 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const navLinks = [
-  { label: 'Services',     href: '#services' },
-  { label: 'AI Suite',     href: '#suite' },
-  { label: 'Portfolio',    href: '#portfolio' },
-  { label: 'Case Studies', href: '#cases' },
-  { label: 'Contact',      href: '#contact' },
+  { label: 'Services',     href: '#services',      isPage: false },
+  { label: 'AI Suite',     href: '#suite',          isPage: false },
+  { label: 'Portfolio',    href: '#portfolio',      isPage: false },
+  { label: 'Case Studies', href: '/case-studies',   isPage: true  },
+  { label: 'Contact',      href: '#contact',        isPage: false },
 ]
 
 export default function Navigation() {
+  const router = useRouter()
+  const pathname = usePathname()
+  const isHome = pathname === '/'
   const [scrolled, setScrolled]   = useState(false)
   const [menuOpen, setMenuOpen]   = useState(false)
   const [activeLink, setActiveLink] = useState('')
@@ -29,8 +33,18 @@ export default function Navigation() {
     return () => { document.body.style.overflow = '' }
   }, [menuOpen])
 
-  const scrollToSection = useCallback((href: string) => {
+  const handleNavClick = useCallback((href: string, isPage: boolean) => {
     setMenuOpen(false)
+    if (isPage) {
+      router.push(href)
+      return
+    }
+    // If not on the home page, navigate to home with the hash — the browser
+    // will scroll to the section after the page loads.
+    if (!isHome) {
+      router.push(`/${href}`)
+      return
+    }
     setActiveLink(href)
     const id = href.replace('#', '')
     const el = document.getElementById(id)
@@ -39,7 +53,7 @@ export default function Navigation() {
       const top = el.getBoundingClientRect().top + window.scrollY - offset
       window.scrollTo({ top, behavior: 'smooth' })
     }
-  }, [])
+  }, [router, isHome])
 
   return (
     <>
@@ -79,7 +93,7 @@ export default function Navigation() {
             {navLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavClick(link.href, link.isPage)}
                 className={`relative px-4 py-2 text-sm rounded-lg transition-all duration-300 cursor-none ${
                   activeLink === link.href
                     ? 'text-white'
@@ -164,7 +178,7 @@ export default function Navigation() {
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavClick(link.href, link.isPage)}
                   className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 hover:text-white
                              transition-colors tracking-wide py-3 border-b border-white/5"
                 >

@@ -1,13 +1,18 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { createClient } from '@/lib/supabase/client'
+import type { Client } from '@/types/database'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// Brand placeholder logos (text-based wordmarks)
-const ROW_A = [
+type BrandItem = { name: string; color: string; logo_url?: string | null }
+
+// Fallback brands shown when the database has no entries yet
+const FALLBACK_A: BrandItem[] = [
   { name: 'APEX MEDIA',   color: '#22d3ee' },
   { name: 'LUMINARY',     color: '#f59e0b' },
   { name: 'NOVU',         color: '#818cf8' },
@@ -18,7 +23,7 @@ const ROW_A = [
   { name: 'PARALLAX CO',  color: '#6ee7b7' },
 ]
 
-const ROW_B = [
+const FALLBACK_B: BrandItem[] = [
   { name: 'NEONBRIDGE',   color: '#fb923c' },
   { name: 'RIFTWORKS',    color: '#38bdf8' },
   { name: 'CELESTIQ',     color: '#c084fc' },
@@ -29,7 +34,7 @@ const ROW_B = [
   { name: 'ZENHIVE',      color: '#a3e635' },
 ]
 
-function LogoStrip({ items, reverse = false }: { items: typeof ROW_A; reverse?: boolean }) {
+function LogoStrip({ items, reverse = false }: { items: BrandItem[]; reverse?: boolean }) {
   const doubled = [...items, ...items]
 
   return (
@@ -46,14 +51,26 @@ function LogoStrip({ items, reverse = false }: { items: typeof ROW_A; reverse?: 
             className="flex items-center justify-center h-12 px-6 rounded-xl glass-light
                        group cursor-none transition-all duration-300 hover:scale-105 shrink-0"
           >
-            <span
-              className="text-sm font-black tracking-[0.18em] uppercase transition-colors duration-300"
-              style={{ color: 'rgba(255,255,255,0.25)' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = brand.color)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
-            >
-              {brand.name}
-            </span>
+            {brand.logo_url ? (
+              <div className="relative h-7 w-20 opacity-40 group-hover:opacity-100 transition-opacity duration-300">
+                <Image
+                  src={brand.logo_url}
+                  alt={brand.name}
+                  fill
+                  className="object-contain"
+                  sizes="80px"
+                />
+              </div>
+            ) : (
+              <span
+                className="text-sm font-black tracking-[0.18em] uppercase transition-colors duration-300"
+                style={{ color: 'rgba(255,255,255,0.25)' }}
+                onMouseEnter={(e) => (e.currentTarget.style.color = brand.color)}
+                onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(255,255,255,0.25)')}
+              >
+                {brand.name}
+              </span>
+            )}
           </div>
         ))}
       </div>
@@ -63,6 +80,28 @@ function LogoStrip({ items, reverse = false }: { items: typeof ROW_A; reverse?: 
 
 export default function Clients() {
   const sectionRef = useRef<HTMLElement>(null)
+  const [rowA, setRowA] = useState<BrandItem[]>([])
+  const [rowB, setRowB] = useState<BrandItem[]>([])
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase
+      .from('clients')
+      .select('name, color, logo_url, display_order')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+      .then(({ data }) => {
+        const clients: BrandItem[] = (data as Client[] | null) ?? []
+        if (clients.length === 0) {
+          setRowA(FALLBACK_A)
+          setRowB(FALLBACK_B)
+        } else {
+          const mid = Math.ceil(clients.length / 2)
+          setRowA(clients.slice(0, mid))
+          setRowB(clients.slice(mid))
+        }
+      })
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -97,8 +136,8 @@ export default function Clients() {
 
       {/* Marquee rows */}
       <div className="space-y-4 relative z-10">
-        <LogoStrip items={ROW_A} />
-        <LogoStrip items={ROW_B} reverse />
+        <LogoStrip items={rowA} />
+        <LogoStrip items={rowB} reverse />
       </div>
 
       {/* CSS for fade edges */}

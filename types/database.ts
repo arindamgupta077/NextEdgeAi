@@ -24,6 +24,7 @@ export interface ContactSubmission {
   id:           string
   name:         string
   email:        string
+  mobile:       string | null
   company:      string | null
   project_type: string | null
   budget:       string | null
@@ -49,6 +50,18 @@ export interface Service {
   description:   string
   icon_name:     string
   color_theme:   string
+  image_url:     string | null
+  display_order: number
+  is_active:     boolean
+  created_at:    string
+  updated_at:    string
+}
+
+export interface Client {
+  id:            string
+  name:          string
+  color:         string
+  logo_url:      string | null
   display_order: number
   is_active:     boolean
   created_at:    string

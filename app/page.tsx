@@ -16,6 +16,21 @@ import Footer        from '@/components/sections/Footer'
 import ContactModal  from '@/components/ContactModal'
 
 export default function Home() {
+  // Smooth-scroll to a hash section when arriving from another page (e.g. /case-studies)
+  useEffect(() => {
+    if (!window.location.hash) return
+    const id = window.location.hash.replace('#', '')
+    // Wait for the page to fully render before scrolling
+    const timer = setTimeout(() => {
+      const el = document.getElementById(id)
+      if (el) {
+        const top = el.getBoundingClientRect().top + window.scrollY - 80
+        window.scrollTo({ top, behavior: 'smooth' })
+      }
+    }, 120)
+    return () => clearTimeout(timer)
+  }, [])
+
   // Initialise Lenis smooth scroll
   useEffect(() => {
     let lenis: InstanceType<typeof import('lenis').default> | null = null

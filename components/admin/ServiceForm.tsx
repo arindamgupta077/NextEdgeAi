@@ -1,12 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import {
-  SERVICE_ICONS,
-  SERVICE_ICON_LABELS,
-  SERVICE_ICON_NAMES,
   SERVICE_THEMES,
   SERVICE_THEME_NAMES,
 } from '@/lib/serviceIcons'
@@ -20,19 +18,45 @@ interface Props {
 export default function ServiceForm({ initialData, onSuccess }: Props) {
   const router = useRouter()
   const isEdit = !!initialData
+  const fileRef = useRef<HTMLInputElement>(null)
 
   const [title,    setTitle]    = useState(initialData?.title       ?? '')
   const [tagline,  setTagline]  = useState(initialData?.tagline     ?? '')
   const [desc,     setDesc]     = useState(initialData?.description ?? '')
-  const [iconName, setIconName] = useState(initialData?.icon_name   ?? 'sparkles')
   const [theme,    setTheme]    = useState(initialData?.color_theme ?? 'cyan')
   const [order,    setOrder]    = useState(String(initialData?.display_order ?? 0))
   const [active,   setActive]   = useState(initialData?.is_active   ?? true)
 
+  // Image upload
+  const [imageFile,    setImageFile]    = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.image_url ?? null)
+  const [removingImg,  setRemovingImg]  = useState(false)
+
   const [saving, setSaving] = useState(false)
   const [error,  setError]  = useState<string | null>(null)
 
-  const selectedTheme = SERVICE_THEMES[theme] ?? SERVICE_THEMES.cyan
+  useEffect(() => {
+    return () => {
+      if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview)
+    }
+  }, [imagePreview])
+
+  const onFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview)
+    setImageFile(file)
+    setImagePreview(URL.createObjectURL(file))
+    setRemovingImg(false)
+  }, [imagePreview])
+
+  const removeImage = () => {
+    if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview)
+    setImageFile(null)
+    setImagePreview(null)
+    setRemovingImg(true)
+    if (fileRef.current) fileRef.current.value = ''
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -42,17 +66,47 @@ export default function ServiceForm({ initialData, onSuccess }: Props) {
     setSaving(true)
     const supabase = createClient()
 
-    const payload = {
-      title:         title.trim(),
-      tagline:       tagline.trim(),
-      description:   desc.trim(),
-      icon_name:     iconName,
-      color_theme:   theme,
-      display_order: parseInt(order) || 0,
-      is_active:     active,
-    }
-
     try {
+      let imageUrl: string | null = removingImg ? null : (initialData?.image_url ?? null)
+
+      // Upload new image if selected
+      if (imageFile) {
+        const ext      = imageFile.name.split('.').pop()
+        const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+
+        const { data: uploadData, error: uploadErr } = await supabase.storage
+          .from('service-images')
+          .upload(fileName, imageFile, { upsert: false })
+
+        if (uploadErr) throw new Error(`Image upload failed: ${uploadErr.message}`)
+
+        // Delete old image if replacing
+        if (initialData?.image_url && isEdit) {
+          const old = initialData.image_url.split('/service-images/').pop()
+          if (old) await supabase.storage.from('service-images').remove([old])
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('service-images')
+          .getPublicUrl(uploadData.path)
+        imageUrl = publicUrl
+      }
+
+      // Delete old image if admin opted to remove it
+      if (removingImg && initialData?.image_url) {
+        const old = initialData.image_url.split('/service-images/').pop()
+        if (old) await supabase.storage.from('service-images').remove([old])
+      }
+
+      const payload = {
+        title:         title.trim(),
+        tagline:       tagline.trim(),
+        description:   desc.trim(),
+        color_theme:   theme,
+        image_url:     imageUrl,
+        display_order: parseInt(order) || 0,
+        is_active:     active,
+      }
       if (isEdit && initialData) {
         const { error: dbErr } = await supabase
           .from('services')
@@ -74,6 +128,8 @@ export default function ServiceForm({ initialData, onSuccess }: Props) {
       setSaving(false)
     }
   }
+
+  const selectedTheme = SERVICE_THEMES[theme] ?? SERVICE_THEMES.cyan
 
   return (
     <form onSubmit={handleSubmit} className="space-y-7">
@@ -105,29 +161,51 @@ export default function ServiceForm({ initialData, onSuccess }: Props) {
           className="admin-input resize-none" />
       </div>
 
-      {/* ── Icon picker ── */}
+      {/* ── Card Image ── */}
       <div>
-        <label className="admin-label">Icon</label>
-        <div className="grid grid-cols-5 sm:grid-cols-8 gap-2 mt-2">
-          {SERVICE_ICON_NAMES.map(name => (
-            <button
-              key={name}
-              type="button"
-              title={SERVICE_ICON_LABELS[name]}
-              onClick={() => setIconName(name)}
-              className={`flex flex-col items-center gap-1.5 p-2.5 rounded-xl border transition-all ${
-                iconName === name
-                  ? 'border-cyan-400/50 bg-cyan-400/10 text-cyan-400'
-                  : 'border-white/6 text-gray-500 hover:text-gray-300 hover:border-white/15'
-              }`}
-            >
-              {SERVICE_ICONS[name]}
-              <span className="text-[9px] leading-none text-center">
-                {SERVICE_ICON_LABELS[name]?.split(' ')[0]}
-              </span>
-            </button>
-          ))}
-        </div>
+        <label className="admin-label">Card Image</label>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/avif"
+          onChange={onFileChange}
+          className="hidden"
+          id="service-image-input"
+        />
+
+        {imagePreview ? (
+          <div className="relative w-full max-w-sm rounded-xl overflow-hidden border border-white/10 group">
+            <div className="relative aspect-video">
+              <Image src={imagePreview} alt="Card image preview" fill className="object-cover" />
+            </div>
+            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+              <label
+                htmlFor="service-image-input"
+                className="px-3 py-1.5 rounded-lg bg-cyan-500/80 hover:bg-cyan-500 text-white text-xs font-medium cursor-pointer transition-colors"
+              >
+                Replace
+              </label>
+              <button
+                type="button"
+                onClick={removeImage}
+                className="px-3 py-1.5 rounded-lg bg-red-500/80 hover:bg-red-500 text-white text-xs font-medium transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          </div>
+        ) : (
+          <label
+            htmlFor="service-image-input"
+            className="flex flex-col items-center justify-center w-full max-w-sm aspect-video rounded-xl border border-dashed border-white/15 hover:border-cyan-400/40 bg-white/2 hover:bg-white/4 cursor-pointer transition-all"
+          >
+            <svg className="w-8 h-8 text-gray-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+            </svg>
+            <span className="text-xs text-gray-500">Click to upload image</span>
+            <span className="text-[10px] text-gray-600 mt-1">JPG, PNG, WebP — max 10 MB</span>
+          </label>
+        )}
       </div>
 
       {/* ── Colour theme picker ── */}
@@ -158,15 +236,19 @@ export default function ServiceForm({ initialData, onSuccess }: Props) {
         </div>
 
         {/* Live preview card */}
-        <div className={`mt-4 rounded-2xl p-5 border border-white/6 bg-gradient-to-br ${selectedTheme.color} max-w-xs`}>
-          <div className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-300 mb-3">
-            {SERVICE_ICONS[iconName]}
+        <div className={`mt-4 rounded-2xl overflow-hidden border border-white/6 bg-gradient-to-br ${selectedTheme.color} max-w-xs`}>
+          {imagePreview && (
+            <div className="relative w-full aspect-video">
+              <Image src={imagePreview} alt="preview" fill className="object-cover" />
+            </div>
+          )}
+          <div className="p-4">
+            <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: selectedTheme.accent }}>
+              {tagline || 'Tagline preview'}
+            </p>
+            <h3 className="text-sm font-bold text-white">{title || 'Service Title'}</h3>
+            <p className="text-xs text-gray-400 mt-1 line-clamp-2">{desc || 'Description preview…'}</p>
           </div>
-          <p className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: selectedTheme.accent }}>
-            {tagline || 'Tagline preview'}
-          </p>
-          <h3 className="text-sm font-bold text-white">{title || 'Service Title'}</h3>
-          <p className="text-xs text-gray-400 mt-1 line-clamp-2">{desc || 'Description preview…'}</p>
         </div>
       </div>
 

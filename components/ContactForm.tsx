@@ -1,19 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
-
-const PROJECT_TYPES = [
-  'AI Feature Film',
-  'Advertising Campaign',
-  'Digital Commercial',
-  'Virtual Production',
-  'Micro-Drama Series',
-  'Visual World-Building',
-  'IP Development',
-  'Other',
-]
 
 const BUDGETS = [
   'Under ₹5,00,000',
@@ -27,6 +16,7 @@ const BUDGETS = [
 type FormState = {
   name:    string
   email:   string
+  mobile:  string
   company: string
   type:    string
   budget:  string
@@ -34,10 +24,22 @@ type FormState = {
 }
 
 export default function ContactForm() {
-  const [form, setForm]             = useState<FormState>({ name: '', email: '', company: '', type: '', budget: '', message: '' })
+  const [form, setForm]             = useState<FormState>({ name: '', email: '', mobile: '', company: '', type: '', budget: '', message: '' })
   const [submitting, setSubmitting] = useState(false)
   const [sent, setSent]             = useState(false)
   const [errors, setErrors]         = useState<Partial<FormState>>({})
+  const [serviceTypes, setServiceTypes] = useState<string[]>([])
+
+  useEffect(() => {
+    createClient()
+      .from('services')
+      .select('title')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+      .then(({ data }) => {
+        if (data) setServiceTypes(data.map(s => s.title))
+      })
+  }, [])
 
   const validate = () => {
     const e: Partial<FormState> = {}
@@ -59,6 +61,7 @@ export default function ContactForm() {
       const { error } = await supabase.from('contact_submissions').insert({
         name:         form.name.trim(),
         email:        form.email.trim(),
+        mobile:       form.mobile.trim() || null,
         company:      form.company.trim() || null,
         project_type: form.type || null,
         budget:       form.budget || null,
@@ -132,6 +135,16 @@ export default function ContactForm() {
       {/* Row 2 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
+          <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Mobile Number</label>
+          <input
+            type="tel"
+            value={form.mobile}
+            onChange={handleChange('mobile')}
+            placeholder="+91 98765 43210"
+            className="form-input w-full rounded-xl px-4 py-3 text-sm"
+          />
+        </div>
+        <div>
           <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Company</label>
           <input
             type="text"
@@ -141,6 +154,10 @@ export default function ContactForm() {
             className="form-input w-full rounded-xl px-4 py-3 text-sm"
           />
         </div>
+      </div>
+
+      {/* Row 3 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
           <label className="block text-xs uppercase tracking-widest text-gray-500 mb-2">Project Type</label>
           <select
@@ -149,7 +166,7 @@ export default function ContactForm() {
             className="form-input w-full rounded-xl px-4 py-3 text-sm cursor-none"
           >
             <option value="">Select type...</option>
-            {PROJECT_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+            {serviceTypes.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
         </div>
       </div>

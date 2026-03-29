@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { motion } from 'framer-motion'
@@ -19,6 +20,7 @@ type ServiceDisplay = {
   color:   string
   border:  string
   glow:    string
+  image?:  string
 }
 
 const HARDCODED: ServiceDisplay[] = [
@@ -35,6 +37,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-cyan-500/20 to-blue-500/5',
     border:  'hover:border-cyan-400/30',
     glow:    'rgba(34,211,238,0.12)',
+    image:   '/1.png',
   },
   {
     icon: (
@@ -49,6 +52,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-indigo-500/20 to-purple-500/5',
     border:  'hover:border-indigo-400/30',
     glow:    'rgba(99,102,241,0.12)',
+    image:   '/2.png',
   },
   {
     icon: (
@@ -63,6 +67,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-blue-500/20 to-cyan-500/5',
     border:  'hover:border-blue-400/30',
     glow:    'rgba(59,130,246,0.12)',
+    image:   '/3.png',
   },
   {
     icon: (
@@ -77,6 +82,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-teal-500/20 to-cyan-500/5',
     border:  'hover:border-teal-400/30',
     glow:    'rgba(20,184,166,0.12)',
+    image:   '/4.png',
   },
   {
     icon: (
@@ -91,6 +97,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-rose-500/20 to-pink-500/5',
     border:  'hover:border-rose-400/30',
     glow:    'rgba(244,63,94,0.12)',
+    image:   '/5.png',
   },
   {
     icon: (
@@ -105,6 +112,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-violet-500/20 to-purple-500/5',
     border:  'hover:border-violet-400/30',
     glow:    'rgba(139,92,246,0.12)',
+    image:   '/6.png',
   },
   {
     icon: (
@@ -119,6 +127,7 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-amber-500/20 to-orange-500/5',
     border:  'hover:border-amber-400/30',
     glow:    'rgba(245,158,11,0.12)',
+    image:   '/7.png',
   },
   {
     icon: (
@@ -133,12 +142,14 @@ const HARDCODED: ServiceDisplay[] = [
     color:   'from-emerald-500/20 to-green-500/5',
     border:  'hover:border-emerald-400/30',
     glow:    'rgba(16,185,129,0.12)',
+    image:   '/8.png',
   },
 ]
 
 export default function Services() {
   const sectionRef = useRef<HTMLElement>(null)
   const [displayServices, setDisplayServices] = useState<ServiceDisplay[]>(HARDCODED)
+  const [selectedSvc, setSelectedSvc] = useState<ServiceDisplay | null>(null)
 
   // Fetch from Supabase; fall back to hardcoded data if DB is empty
   useEffect(() => {
@@ -160,6 +171,7 @@ export default function Services() {
               color:   SERVICE_THEMES[s.color_theme as string]?.color ?? SERVICE_THEMES.cyan.color,
               border:  SERVICE_THEMES[s.color_theme as string]?.border ?? SERVICE_THEMES.cyan.border,
               glow:    SERVICE_THEMES[s.color_theme as string]?.glow  ?? SERVICE_THEMES.cyan.glow,
+              image:   s.image_url ?? undefined,
             }))
           )
         }
@@ -214,35 +226,54 @@ export default function Services() {
           {displayServices.map((svc) => (
             <div
               key={svc.id != null ? String(svc.id) : svc.title}
-              className={`service-card group relative rounded-2xl p-4 sm:p-6 cursor-none
+              onClick={() => setSelectedSvc(svc)}
+              className={`service-card group relative rounded-2xl cursor-pointer
                           border border-white/6 ${svc.border}
-                          bg-gradient-to-br ${svc.color}
                           transition-all duration-400 card-hover overflow-hidden`}
             >
+              {/* Full card image */}
+              {svc.image && (
+                <div className="absolute inset-0">
+                  <Image
+                    src={svc.image}
+                    alt={svc.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {/* Dark gradient over the bottom so text is legible */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+                </div>
+              )}
+
+              {/* Fallback gradient background (when no image) */}
+              {!svc.image && (
+                <div className={`absolute inset-0 bg-gradient-to-br ${svc.color}`} />
+              )}
+
               {/* Hover glow */}
               <div
                 className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{ background: `radial-gradient(circle at 50% 0%, ${svc.glow} 0%, transparent 70%)` }}
               />
 
-              {/* Icon */}
-              <div className="relative mb-5 w-12 h-12 flex items-center justify-center rounded-xl bg-white/5 text-gray-300 group-hover:text-white transition-colors">
-                {svc.icon}
-              </div>
+              {/* Content — sits over the image */}
+              <div className="relative z-10 flex flex-col justify-end min-h-[280px] p-4 sm:p-5">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1.5 group-hover:text-cyan-400 transition-colors">
+                  {svc.tagline}
+                </p>
+                <h3 className="text-lg font-bold text-white mb-2 leading-tight">{svc.title}</h3>
+                <p className="text-sm text-gray-300 leading-relaxed line-clamp-2">{svc.desc}</p>
 
-              {/* Content */}
-              <p className="text-[10px] uppercase tracking-[0.2em] text-gray-500 mb-2 group-hover:text-cyan-400 transition-colors">
-                {svc.tagline}
-              </p>
-              <h3 className="text-lg font-bold text-white mb-3 leading-tight">{svc.title}</h3>
-              <p className="text-sm text-gray-400 leading-relaxed line-clamp-3">{svc.desc}</p>
-
-              {/* Arrow */}
-              <div className="mt-5 flex items-center gap-1.5 text-xs text-gray-500 group-hover:text-cyan-400 transition-colors">
-                <span className="group-hover:translate-x-1 transition-transform duration-300">Learn more</span>
-                <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                </svg>
+                {/* Arrow */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); setSelectedSvc(svc) }}
+                  className="mt-4 flex items-center gap-1.5 text-xs text-gray-400 group-hover:text-cyan-400 transition-colors"
+                >
+                  <span className="group-hover:translate-x-1 transition-transform duration-300">Learn more</span>
+                  <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                  </svg>
+                </button>
               </div>
 
               {/* Animated border line */}
@@ -251,6 +282,63 @@ export default function Services() {
           ))}
         </div>
       </div>
+
+      {/* Modal */}
+      {selectedSvc && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+          onClick={() => setSelectedSvc(null)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.92, y: 24 }}
+            transition={{ duration: 0.25, ease: 'easeOut' }}
+            onClick={(e) => e.stopPropagation()}
+            className={`relative w-full max-w-lg rounded-2xl overflow-hidden border border-white/10 bg-[#0d0d1a] shadow-2xl`}
+          >
+            {/* Modal image */}
+            {selectedSvc.image && (
+              <div className="relative w-full aspect-video">
+                <Image src={selectedSvc.image} alt={selectedSvc.title} fill className="object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0d0d1a]" />
+              </div>
+            )}
+
+            {/* Glow accent */}
+            <div
+              className="absolute top-0 left-0 right-0 h-40 pointer-events-none"
+              style={{ background: `radial-gradient(circle at 50% 0%, ${selectedSvc.glow} 0%, transparent 70%)` }}
+            />
+
+            <div className="relative p-6 sm:p-8">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-cyan-400 mb-2">{selectedSvc.tagline}</p>
+              <h3 className="text-2xl font-black text-white mb-4 leading-tight">{selectedSvc.title}</h3>
+              <p className="text-sm text-gray-300 leading-relaxed">{selectedSvc.desc}</p>
+
+              <button
+                onClick={() => setSelectedSvc(null)}
+                className="mt-8 w-full py-2.5 rounded-xl border border-white/10 text-sm text-gray-400 hover:text-white hover:border-white/20 transition-colors"
+              >
+                Close
+              </button>
+            </div>
+
+            {/* Close ✕ */}
+            <button
+              onClick={() => setSelectedSvc(null)}
+              className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-black/50 text-gray-400 hover:text-white transition-colors"
+            >
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
     </section>
   )
 }
