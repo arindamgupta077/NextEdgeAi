@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname, useRouter } from 'next/navigation'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 
 const NAV = [
@@ -76,12 +77,14 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
     <aside className="flex flex-col w-64 min-h-screen bg-[#06060c] border-r border-white/5">
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-6 py-5 border-b border-white/5">
-        <div className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center shrink-0">
-          <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
-            <path d="M3 10L10 3L17 10L10 17L3 10Z" stroke="white" strokeWidth="1.5" fill="none"/>
-            <circle cx="10" cy="10" r="2.5" fill="white"/>
-          </svg>
-        </div>
+        <Image
+          src="/logo.png"
+          alt="NextEdgeAI Logo"
+          width={110}
+          height={34}
+          className="h-9 w-auto object-contain"
+          priority
+        />
         <div>
           <div className="font-bold text-sm leading-tight">
             NextEdge<span className="text-cyan-400">AI</span>
