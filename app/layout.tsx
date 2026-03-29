@@ -31,6 +31,10 @@ export const metadata: Metadata = {
     'brand films',
   ],
   authors: [{ name: 'NextEdgeAI' }],
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
   openGraph: {
     title: 'NextEdgeAI — AI Film Production Studio',
     description: 'Where artificial intelligence meets cinematic artistry.',

@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 
 const FOOTER_LINKS = {
@@ -138,17 +139,14 @@ export default function Footer() {
                 onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                 className="cursor-none flex items-center gap-2.5 mb-5 group"
               >
-                <div className="relative w-9 h-9">
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500" />
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 blur-md opacity-40 group-hover:opacity-70 transition-opacity" />
-                  <div className="relative flex items-center justify-center h-full">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M3 10L10 3L17 10L10 17L3 10Z" stroke="white" strokeWidth="1.5" fill="none"/>
-                      <circle cx="10" cy="10" r="2.5" fill="white"/>
-                    </svg>
-                  </div>
-                </div>
-                <span className="font-bold text-lg tracking-tight">
+                <Image
+                  src="/logo.png"
+                  alt="NextEdgeAI Logo"
+                  width={140}
+                  height={44}
+                  className="h-11 w-auto object-contain"
+                />
+                <span className="font-bold text-[1.45rem] tracking-tight leading-none">
                   NextEdge<span className="text-gradient">AI</span>
                 </span>
               </button>

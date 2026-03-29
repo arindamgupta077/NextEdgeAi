@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useRouter, usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -69,24 +70,23 @@ export default function Navigation() {
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
           {/* Logo */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          <Link
+            href="/"
+            onClick={() => { if (isHome) window.scrollTo({ top: 0, behavior: 'smooth' }) }}
             className="flex items-center gap-2.5 group cursor-none"
           >
-            <div className="relative w-9 h-9">
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 opacity-90 group-hover:opacity-100 transition-opacity" />
-              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-cyan-400 to-indigo-500 blur-md opacity-40 group-hover:opacity-70 transition-opacity" />
-              <div className="relative flex items-center justify-center h-full">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path d="M3 10L10 3L17 10L10 17L3 10Z" stroke="white" strokeWidth="1.5" fill="none"/>
-                  <circle cx="10" cy="10" r="2.5" fill="white"/>
-                </svg>
-              </div>
-            </div>
-            <span className="font-bold text-[1.15rem] tracking-tight leading-none">
+            <Image
+              src="/logo.png"
+              alt="NextEdgeAI Logo"
+              width={180}
+              height={56}
+              className="h-14 w-auto object-contain"
+              priority
+            />
+            <span className="font-bold text-[1.45rem] tracking-tight leading-none">
               NextEdge<span className="text-gradient">AI</span>
             </span>
-          </button>
+          </Link>
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
