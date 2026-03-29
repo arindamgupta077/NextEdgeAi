@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
+import { useEffect } from 'react'
 
 const NAV = [
   {
@@ -57,7 +58,15 @@ const NAV = [
   },
 ]
 
-export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
+export default function AdminSidebar({
+  userEmail,
+  open,
+  onClose,
+}: {
+  userEmail?: string
+  open?: boolean
+  onClose?: () => void
+}) {
   const pathname = usePathname()
   const router   = useRouter()
 
@@ -73,8 +82,38 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
     router.refresh()
   }
 
+  // Close sidebar on route change (mobile)
+  useEffect(() => {
+    if (open) onClose?.()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname])
+
+  // Prevent body scroll when mobile sidebar is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [open])
+
   return (
-    <aside className="flex flex-col w-64 min-h-screen bg-[#06060c] border-r border-white/5">
+    <>
+      {/* Backdrop — mobile only */}
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
+          onClick={onClose}
+        />
+      )}
+
+      <aside className={`
+        flex flex-col w-64 bg-[#06060c] border-r border-white/5
+        fixed inset-y-0 left-0 z-50 transition-transform duration-300
+        lg:static lg:translate-x-0 lg:z-auto lg:min-h-screen
+        ${open ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
       {/* Logo */}
       <div className="flex items-center gap-2.5 px-6 py-5 border-b border-white/5">
         <Image
@@ -154,5 +193,6 @@ export default function AdminSidebar({ userEmail }: { userEmail?: string }) {
         </button>
       </div>
     </aside>
+    </>
   )
 }
