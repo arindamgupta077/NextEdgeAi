@@ -105,10 +105,22 @@ export default function Clients() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.clients-heading',
-        { opacity: 0, y: 40 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.clients-heading', start: 'top 95%' } }
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.clients-heading', start: 'top 86%' }
+      })
+      tl.fromTo('.clients-label',
+        { opacity: 0, y: 14, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo('.clients-title',
+        { opacity: 0, y: 60, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.0, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.clients-sub',
+        { opacity: 0, y: 25, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.8, ease: 'power3.out' },
+        '-=0.55'
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -121,14 +133,14 @@ export default function Clients() {
 
       <div className="container-narrow relative z-10 mb-12 px-6">
         <div className="clients-heading text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-violet-400">
-            <span className="w-1 h-1 rounded-full bg-violet-400" />
+          <div className="clients-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-violet-400">
+            <span className="w-1 h-1 rounded-full bg-violet-400 animate-pulse" />
             Our Clients
           </div>
-          <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-4">
+          <h2 className="clients-title opacity-0 text-4xl md:text-5xl font-black tracking-tight mb-4">
             Trusted by <span className="text-gradient">Forward-Thinking Brands</span>
           </h2>
-          <p className="text-gray-400 max-w-lg mx-auto">
+          <p className="clients-sub opacity-0 text-gray-400 max-w-lg mx-auto">
             From emerging DTC startups to global entertainment conglomerates — they all chose NextEdgeAI.
           </p>
         </div>

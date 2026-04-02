@@ -146,10 +146,32 @@ export default function Portfolio() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.portfolio-heading',
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-          scrollTrigger: { trigger: '.portfolio-heading', start: 'top 98%' } }
+      // Section entrance timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.portfolio-heading', start: 'top 86%' }
+      })
+      tl.fromTo('.portfolio-label',
+        { opacity: 0, y: 16, scale: 0.88 },
+        { opacity: 1, y: 0,  scale: 1, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo('.portfolio-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0,  skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.portfolio-sub',
+        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.6'
+      )
+
+      // Parallax background
+      gsap.fromTo('.portfolio-bg-blob',
+        { yPercent: -12 },
+        {
+          yPercent: 12, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
+        }
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -161,20 +183,24 @@ export default function Portfolio() {
       <div className="absolute inset-0 grid-bg opacity-25" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
+      {/* Parallax bg blob */}
+      <div className="portfolio-bg-blob absolute top-1/3 right-0 w-[600px] h-[600px] rounded-full pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.045) 0%, transparent 65%)' }} />
+
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="portfolio-heading flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-emerald-400">
-              <span className="w-1 h-1 rounded-full bg-emerald-400" />
+            <div className="portfolio-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-emerald-400">
+              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
               Featured Work
             </div>
-            <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
+            <h2 className="portfolio-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
               Work That<br/>
               <span className="text-gradient">Speaks Itself</span>
             </h2>
           </div>
-          <p className="text-gray-400 max-w-xs md:text-right leading-relaxed">
+          <p className="portfolio-sub opacity-0 text-gray-400 max-w-xs md:text-right leading-relaxed">
             A selection of recent productions pushing the boundary of what AI-assisted cinema can achieve.
           </p>
         </div>

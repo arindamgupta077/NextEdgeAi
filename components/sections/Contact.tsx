@@ -89,20 +89,44 @@ export default function Contact() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.contact-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-heading', start: 'top 95%' } }
+      // Heading entrance timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.contact-heading', start: 'top 86%' }
+      })
+      tl.fromTo('.contact-label',
+        { opacity: 0, y: 16, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
       )
+      .fromTo('.contact-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.contact-sub',
+        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.6'
+      )
+
+      // Info + Form slide in from opposing sides
       gsap.fromTo('.contact-info',
-        { opacity: 0, x: -50 },
-        { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-grid', start: 'top 95%' } }
+        { opacity: 0, x: -70, filter: 'blur(6px)' },
+        { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.0, ease: 'power4.out',
+          scrollTrigger: { trigger: '.contact-grid', start: 'top 88%' } }
       )
       gsap.fromTo('.contact-form-wrap',
-        { opacity: 0, x: 50 },
-        { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.contact-grid', start: 'top 95%' } }
+        { opacity: 0, x: 70, filter: 'blur(6px)' },
+        { opacity: 1, x: 0, filter: 'blur(0px)', duration: 1.0, ease: 'power4.out',
+          scrollTrigger: { trigger: '.contact-grid', start: 'top 88%' } }
+      )
+
+      // Parallax glow
+      gsap.fromTo('.contact-bg-blob',
+        { yPercent: -25 },
+        {
+          yPercent: 25, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
+        }
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -112,23 +136,23 @@ export default function Contact() {
     <section id="contact" ref={sectionRef} className="relative section-padding overflow-hidden">
       <div className="absolute inset-0 bg-[#07070f]" />
       <div className="absolute inset-0 grid-bg opacity-25" />
-      {/* Glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse, rgba(34,211,238,0.07) 0%, transparent 70%)' }} />
+      {/* Parallax glow */}
+      <div className="contact-bg-blob absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(ellipse, rgba(34,211,238,0.08) 0%, transparent 68%)' }} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="contact-heading text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
+          <div className="contact-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
             <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
             New Projects Open
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="contact-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             Let's Build Something<br/>
             <span className="text-gradient">Extraordinary</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
+          <p className="contact-sub opacity-0 max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
             Tell us about your vision. We'll respond within 24 hours with a tailored proposal.
           </p>
         </div>

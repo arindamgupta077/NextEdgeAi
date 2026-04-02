@@ -212,6 +212,145 @@ body {
   animation: float 14s ease-in-out 6s infinite;
 }
 
+/* ─── Nebula Drift ────────────────────────────────────────────────────── */
+@keyframes nebulaDrift {
+  0%   { transform: translate(0px, 0px) scale(1); }
+  33%  { transform: translate(30px, -20px) scale(1.04); }
+  66%  { transform: translate(-20px, 30px) scale(0.97); }
+  100% { transform: translate(15px, -10px) scale(1.02); }
+}
+
+/* ─── Float keyframe ─────────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-28px); }
+}
+
+/* ─── Clip-path reveal utilities ─────────────────────────────────────── */
+.clip-reveal {
+  clip-path: inset(0 0 100% 0);
+}
+.clip-reveal.revealed {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Blur-in utility (used by GSAP filter animations) ───────────────── */
+.blur-in {
+  filter: blur(12px);
+  opacity: 0;
+}
+
+/* ─── Section entry line (decorative horizontal rule) ───────────────── */
+.section-entry-line {
+  width: 0%;
+  height: 1px;
+  background: linear-gradient(90deg, #22d3ee, #6366f1, transparent);
+  transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.section-entry-line.active {
+  width: 100%;
+}
+
+/* ─── Parallax wrapper ───────────────────────────────────────────────── */
+.parallax-layer {
+  will-change: transform;
+}
+
+/* ─── Premium card shine effect ──────────────────────────────────────── */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 60%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255,255,255,0.04) 50%,
+    transparent 65%
+  );
+  transform: skewX(-15deg);
+  transition: none;
+  pointer-events: none;
+  z-index: 2;
+}
+@media (hover: hover) {
+  .card-shine:hover::before {
+    animation: shinePass 0.6s ease forwards;
+  }
+}
+@keyframes shinePass {
+  0%   { top: -100%; left: -100%; }
+  100% { top: 100%;  left: 100%;  }
+}
+
+/* ─── Text reveal with clip ──────────────────────────────────────────── */
+.text-reveal-wrapper {
+  overflow: hidden;
+}
+.text-reveal-inner {
+  display: block;
+  transform: translateY(110%);
+  opacity: 0;
+}
+
+/* ─── Staggered word split animation helper ──────────────────────────── */
+.word-split span {
+  display: inline-block;
+  overflow: hidden;
+}
+
+/* ─── Premium section background shimmer ────────────────────────────── */
+.section-shimmer {
+  position: relative;
+}
+.section-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(34,211,238,0.015) 50%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── Animated counter accent ─────────────────────────────────────────── */
+@keyframes counterPop {
+  0%   { transform: scale(0.7); opacity: 0; }
+  70%  { transform: scale(1.08); }
+  100% { transform: scale(1);   opacity: 1; }
+}
+.counter-pop {
+  animation: counterPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ─── Cinematic wipe transition ──────────────────────────────────────── */
+@keyframes wipeRight {
+  from { clip-path: inset(0 100% 0 0); opacity: 1; }
+  to   { clip-path: inset(0 0% 0 0);   opacity: 1; }
+}
+.wipe-right {
+  animation: wipeRight 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ─── Glowing border pulse ────────────────────────────────────────────── */
+@keyframes borderGlow {
+  0%, 100% { box-shadow: 0 0 0px rgba(34,211,238,0); }
+  50%       { box-shadow: 0 0 20px rgba(34,211,238,0.25), 0 0 40px rgba(34,211,238,0.1); }
+}
+.border-glow-pulse {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
 /* ─── FAQ Accordion ──────────────────────────────────────────────────── */
 .faq-content {
   transition: max-height 0.4s cubic-bezier(0.22, 1, 0.36, 1),

@@ -180,17 +180,42 @@ export default function Services() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.services-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.services-heading', start: 'top 85%' } }
+      // Section label + heading + sub — cinematic timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.services-heading', start: 'top 84%' }
+      })
+      tl.fromTo('.services-label',
+        { opacity: 0, y: 16, scale: 0.9 },
+        { opacity: 1, y: 0,  scale: 1, duration: 0.7, ease: 'power3.out' }
       )
+      .fromTo('.services-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0,  skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.services-sub',
+        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.55'
+      )
+
+      // Cards stagger with scale + blur
       gsap.fromTo('.service-card',
-        { opacity: 0, y: 60, scale: 0.95 },
+        { opacity: 0, y: 70, scale: 0.9, filter: 'blur(6px)' },
         {
-          opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out',
-          stagger: 0.08,
-          scrollTrigger: { trigger: '.services-grid', start: 'top 85%' },
+          opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+          duration: 0.85, ease: 'power4.out',
+          stagger: { amount: 0.9, from: 'start' },
+          scrollTrigger: { trigger: '.services-grid', start: 'top 84%' },
+        }
+      )
+
+      // Background parallax blob
+      gsap.fromTo('.services-bg-blob',
+        { yPercent: -15 },
+        {
+          yPercent: 15, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
         }
       )
     }, sectionRef)
@@ -204,18 +229,22 @@ export default function Services() {
       <div className="absolute inset-0 grid-bg opacity-30" />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
+      {/* Parallax background blob */}
+      <div className="services-bg-blob absolute top-1/4 left-1/2 -translate-x-1/2 w-[700px] h-[700px] rounded-full pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 65%)' }} />
+
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="services-heading text-center mb-12 sm:mb-20">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
-            <span className="w-1 h-1 rounded-full bg-cyan-400" />
+          <div className="services-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
+            <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
             What We Create
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
+          <h2 className="services-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black leading-tight tracking-tight mb-6">
             Services Built for<br/>
             <span className="text-gradient">The Next Era</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 text-lg leading-relaxed">
+          <p className="services-sub opacity-0 max-w-xl mx-auto text-gray-400 text-lg leading-relaxed">
             Eight specialised capabilities fused with AI to deliver production
             quality that was once unimaginable — now at your fingertips.
           </p>
@@ -229,7 +258,7 @@ export default function Services() {
               onClick={() => setSelectedSvc(svc)}
               className={`service-card group relative rounded-2xl cursor-pointer
                           border border-white/6 ${svc.border}
-                          transition-all duration-400 card-hover overflow-hidden`}
+                          transition-all duration-500 card-hover card-shine overflow-hidden`}
             >
               {/* Full card image */}
               {svc.image && (
@@ -238,10 +267,9 @@ export default function Services() {
                     src={svc.image}
                     alt={svc.title}
                     fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  {/* Dark gradient over the bottom so text is legible */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
                 </div>
               )}
 
@@ -252,32 +280,32 @@ export default function Services() {
 
               {/* Hover glow */}
               <div
-                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                style={{ background: `radial-gradient(circle at 50% 0%, ${svc.glow} 0%, transparent 70%)` }}
+                className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none"
+                style={{ background: `radial-gradient(circle at 50% 0%, ${svc.glow} 0%, transparent 65%)` }}
               />
 
               {/* Content — sits over the image */}
               <div className="relative z-10 flex flex-col justify-end min-h-[280px] p-4 sm:p-5">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1.5 group-hover:text-cyan-400 transition-colors">
+                <p className="text-[10px] uppercase tracking-[0.2em] text-gray-300 mb-1.5 group-hover:text-cyan-400 transition-colors duration-300">
                   {svc.tagline}
                 </p>
-                <h3 className="text-lg font-bold text-white mb-2 leading-tight">{svc.title}</h3>
+                <h3 className="text-lg font-bold text-white mb-2 leading-tight group-hover:text-white transition-colors">{svc.title}</h3>
                 <p className="text-sm text-gray-300 leading-relaxed line-clamp-2">{svc.desc}</p>
 
                 {/* Arrow */}
                 <button
                   onClick={(e) => { e.stopPropagation(); setSelectedSvc(svc) }}
-                  className="mt-4 flex items-center gap-1.5 text-xs text-gray-400 group-hover:text-cyan-400 transition-colors"
+                  className="mt-4 flex items-center gap-1.5 text-xs text-gray-400 group-hover:text-cyan-400 transition-colors duration-300"
                 >
                   <span className="group-hover:translate-x-1 transition-transform duration-300">Learn more</span>
-                  <svg className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <svg className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
                   </svg>
                 </button>
               </div>
 
               {/* Animated border line */}
-              <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-cyan-400 to-indigo-400 group-hover:w-full transition-all duration-500 rounded-b-2xl" />
+              <div className="absolute bottom-0 left-0 h-[2px] w-0 bg-gradient-to-r from-cyan-400 to-indigo-400 group-hover:w-full transition-all duration-600 rounded-b-2xl" />
             </div>
           ))}
         </div>

@@ -76,20 +76,39 @@ export default function Stats() {
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start:   'top 95%',
+        start:   'top 88%',
         onEnter: () => setStarted(true),
       })
-      gsap.fromTo('.stats-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.stats-heading', start: 'top 95%' } }
+
+      // Heading timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.stats-heading', start: 'top 86%' }
+      })
+      tl.fromTo('.stats-label',
+        { opacity: 0, y: 14, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo('.stats-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
       )
       gsap.fromTo('.stat-block',
-        { opacity: 0, y: 50, scale: 0.92 },
+        { opacity: 0, y: 70, scale: 0.88, filter: 'blur(6px)' },
         {
-          opacity: 1, y: 0, scale: 1, duration: 0.8, ease: 'power3.out',
-          stagger: 0.12,
-          scrollTrigger: { trigger: '.stats-grid', start: 'top 95%' },
+          opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+          duration: 1.0, ease: 'power4.out',
+          stagger: { amount: 0.55, from: 'start' },
+          scrollTrigger: { trigger: '.stats-grid', start: 'top 88%' },
+        }
+      )
+
+      // Parallax ambient blob
+      gsap.fromTo('.stats-bg-blob',
+        { yPercent: -20 },
+        {
+          yPercent: 20, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2.5 },
         }
       )
     }, sectionRef)
@@ -103,20 +122,20 @@ export default function Stats() {
         background: 'linear-gradient(180deg, #07070f 0%, #06060c 50%, #07070f 100%)'
       }} />
       <div className="absolute inset-0 grid-bg opacity-30" />
-      {/* Accent radial */}
-      <div className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(34,211,238,0.04) 0%, transparent 70%)' }} />
+      {/* Parallax radial blob */}
+      <div className="stats-bg-blob absolute inset-0 pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(ellipse at 50% 50%, rgba(34,211,238,0.055) 0%, transparent 65%)' }} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="stats-heading text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-amber-400">
-            <span className="w-1 h-1 rounded-full bg-amber-400" />
+          <div className="stats-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-amber-400">
+            <span className="w-1 h-1 rounded-full bg-amber-400 animate-pulse" />
             By the Numbers
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
+          <h2 className="stats-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black tracking-tight">
             Numbers That<br/>
             <span className="text-gradient">Define Our Impact</span>
           </h2>
@@ -127,7 +146,7 @@ export default function Stats() {
           {STATS.map((s, i) => (
             <div
               key={s.label}
-              className={`stat-block relative rounded-3xl p-5 sm:p-8 border border-white/6 overflow-hidden card-hover`}
+              className={`stat-block group relative rounded-3xl p-5 sm:p-8 border border-white/6 overflow-hidden card-hover card-shine border-glow-pulse`}
               style={{ background: `linear-gradient(135deg, ${s.bg.split(' ')[1].replace('from-','').replace('/10','')}18, transparent)` }}
             >
               {/* Gradient fill */}

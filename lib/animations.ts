@@ -2,17 +2,6 @@
  * lib/animations.ts
  * ─────────────────────────────────────────────────────────────────────
  * Reusable GSAP ScrollTrigger animation presets used across sections.
- * Import the function you need and call it inside useEffect with
- * gsap.context() for automatic cleanup.
- *
- * Usage example:
- *   import { fadeUp, staggerFadeUp } from '@/lib/animations'
- *   useEffect(() => {
- *     const ctx = gsap.context(() => {
- *       fadeUp('.my-element', { trigger: '.my-section' })
- *     }, sectionRef)
- *     return () => ctx.revert()
- *   }, [])
  */
 
 import gsap from 'gsap'
@@ -40,27 +29,40 @@ type AnimOptions = TriggerOptions & {
 
 /* ─── Core presets ───────────────────────────────────────────────────── */
 
-/** Fade & slide up */
+/** Fade & slide up — cinematic blur dissolve */
 export function fadeUp(selector: string, opts: AnimOptions = {}) {
-  const { trigger, start = 'top 85%', delay = 0, duration = 0.85, ease = 'power3.out' } = opts
+  const { trigger, start = 'top 88%', delay = 0, duration = 1.0, ease = 'power4.out' } = opts
   return gsap.fromTo(
     selector,
-    { opacity: 0, y: 55 },
+    { opacity: 0, y: 65, filter: 'blur(6px)' },
     {
-      opacity: 1, y: 0, duration, delay, ease,
+      opacity: 1, y: 0, filter: 'blur(0px)', duration, delay, ease,
       scrollTrigger: { trigger: trigger ?? selector, start },
     }
   )
 }
 
-/** Staggered fade up for lists/grids */
+/** Staggered fade up for lists/grids — premium stagger with scale */
 export function staggerFadeUp(selector: string, opts: AnimOptions & { stagger?: number } = {}) {
-  const { trigger, start = 'top 80%', delay = 0, duration = 0.75, ease = 'power3.out', stagger = 0.1 } = opts
+  const { trigger, start = 'top 82%', delay = 0, duration = 0.9, ease = 'power4.out', stagger = 0.12 } = opts
   return gsap.fromTo(
     selector,
-    { opacity: 0, y: 50, scale: 0.95 },
+    { opacity: 0, y: 60, scale: 0.93, filter: 'blur(4px)' },
     {
-      opacity: 1, y: 0, scale: 1, duration, delay, ease, stagger,
+      opacity: 1, y: 0, scale: 1, filter: 'blur(0px)', duration, delay, ease, stagger,
+      scrollTrigger: { trigger: trigger ?? selector, start },
+    }
+  )
+}
+
+/** Cinematic text reveal — skew + blur + rise */
+export function textReveal(selector: string, opts: AnimOptions & { stagger?: number } = {}) {
+  const { trigger, start = 'top 88%', delay = 0, duration = 1.1, ease = 'power4.out', stagger = 0.08 } = opts
+  return gsap.fromTo(
+    selector,
+    { opacity: 0, y: 80, skewY: 4, filter: 'blur(8px)' },
+    {
+      opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration, delay, ease, stagger,
       scrollTrigger: { trigger: trigger ?? selector, start },
     }
   )
@@ -68,12 +70,12 @@ export function staggerFadeUp(selector: string, opts: AnimOptions & { stagger?: 
 
 /** Slide in from left */
 export function slideLeft(selector: string, opts: AnimOptions = {}) {
-  const { trigger, start = 'top 85%', delay = 0, duration = 0.9, ease = 'power3.out' } = opts
+  const { trigger, start = 'top 88%', delay = 0, duration = 1.0, ease = 'power4.out' } = opts
   return gsap.fromTo(
     selector,
-    { opacity: 0, x: -60 },
+    { opacity: 0, x: -80, filter: 'blur(4px)' },
     {
-      opacity: 1, x: 0, duration, delay, ease,
+      opacity: 1, x: 0, filter: 'blur(0px)', duration, delay, ease,
       scrollTrigger: { trigger: trigger ?? selector, start },
     }
   )
@@ -81,33 +83,60 @@ export function slideLeft(selector: string, opts: AnimOptions = {}) {
 
 /** Slide in from right */
 export function slideRight(selector: string, opts: AnimOptions = {}) {
-  const { trigger, start = 'top 85%', delay = 0, duration = 0.9, ease = 'power3.out' } = opts
+  const { trigger, start = 'top 88%', delay = 0, duration = 1.0, ease = 'power4.out' } = opts
   return gsap.fromTo(
     selector,
-    { opacity: 0, x: 60 },
+    { opacity: 0, x: 80, filter: 'blur(4px)' },
     {
-      opacity: 1, x: 0, duration, delay, ease,
+      opacity: 1, x: 0, filter: 'blur(0px)', duration, delay, ease,
       scrollTrigger: { trigger: trigger ?? selector, start },
     }
   )
 }
 
-/** Scale into view */
+/** Scale into view with spring feel */
 export function scaleIn(selector: string, opts: AnimOptions = {}) {
-  const { trigger, start = 'top 85%', delay = 0, duration = 0.7, ease = 'back.out(1.4)' } = opts
+  const { trigger, start = 'top 88%', delay = 0, duration = 0.85, ease = 'back.out(1.6)' } = opts
   return gsap.fromTo(
     selector,
-    { opacity: 0, scale: 0.75 },
+    { opacity: 0, scale: 0.72, filter: 'blur(6px)' },
     {
-      opacity: 1, scale: 1, duration, delay, ease,
+      opacity: 1, scale: 1, filter: 'blur(0px)', duration, delay, ease,
       scrollTrigger: { trigger: trigger ?? selector, start },
     }
   )
+}
+
+/** Cinematic stagger for section headings — label then heading then sub */
+export function sectionEntrance(
+  labelSel: string,
+  headingSel: string,
+  subSel: string,
+  triggerEl: string | Element
+) {
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: triggerEl, start: 'top 82%' }
+  })
+  tl.fromTo(labelSel,
+    { opacity: 0, y: 20, scale: 0.9 },
+    { opacity: 1, y: 0,  scale: 1, duration: 0.7, ease: 'power3.out' }
+  )
+  .fromTo(headingSel,
+    { opacity: 0, y: 55, skewY: 3, filter: 'blur(8px)' },
+    { opacity: 1, y: 0,  skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+    '-=0.4'
+  )
+  .fromTo(subSel,
+    { opacity: 0, y: 30, filter: 'blur(4px)' },
+    { opacity: 1, y: 0,  filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+    '-=0.6'
+  )
+  return tl
 }
 
 /** Parallax scrolling — pin free, scrubbed */
 export function parallax(selector: string, yPercent: number, opts: TriggerOptions = {}) {
-  const { trigger, start = 'top bottom', end = 'bottom top', scrub = 1 } = opts
+  const { trigger, start = 'top bottom', end = 'bottom top', scrub = 1.5 } = opts
   return gsap.fromTo(
     selector,
     { yPercent: -yPercent },
@@ -119,9 +148,9 @@ export function parallax(selector: string, yPercent: number, opts: TriggerOption
   )
 }
 
-/** Horizontal marquee-like scroll reveal — scrubbed */
+/** Horizontal scroll reveal — scrubbed with momentum feel */
 export function scrollRevealX(selector: string, distance: number, opts: TriggerOptions = {}) {
-  const { trigger, start = 'top bottom', end = 'bottom top', scrub = 1.5 } = opts
+  const { trigger, start = 'top bottom', end = 'bottom top', scrub = 2 } = opts
   return gsap.fromTo(
     selector,
     { x: distance },
@@ -133,22 +162,36 @@ export function scrollRevealX(selector: string, distance: number, opts: TriggerO
   )
 }
 
+/** Subtle background parallax for section orbs/blobs */
+export function bgParallax(selector: string, opts: TriggerOptions = {}) {
+  const { trigger, start = 'top bottom', end = 'bottom top', scrub = 2 } = opts
+  return gsap.fromTo(
+    selector,
+    { yPercent: -18 },
+    {
+      yPercent: 18,
+      ease: 'none',
+      scrollTrigger: { trigger: trigger ?? selector, start, end, scrub },
+    }
+  )
+}
+
 /** Counter animation — must be called outside gsap.context */
 export function animateCounter(
   element: HTMLElement,
   end: number,
-  duration = 2,
+  duration = 2.2,
   onUpdate: (v: number) => void
 ) {
   const obj = { value: 0 }
   return gsap.to(obj, {
     value:    end,
     duration,
-    ease:     'power2.out',
+    ease:     'power3.out',
     onUpdate: () => onUpdate(Math.round(obj.value)),
     scrollTrigger: {
       trigger: element,
-      start:   'top 75%',
+      start:   'top 80%',
       once:    true,
     },
   })
@@ -156,25 +199,41 @@ export function animateCounter(
 
 /** Section divider line draw */
 export function drawLine(selector: string, opts: AnimOptions = {}) {
-  const { trigger, start = 'top 85%', duration = 0.8, delay = 0 } = opts
+  const { trigger, start = 'top 88%', duration = 1.0, delay = 0 } = opts
   return gsap.fromTo(
     selector,
     { scaleX: 0, transformOrigin: 'left center' },
     {
-      scaleX: 1, duration, delay, ease: 'power3.inOut',
+      scaleX: 1, duration, delay, ease: 'power4.inOut',
       scrollTrigger: { trigger: trigger ?? selector, start },
+    }
+  )
+}
+
+/** Pin a section and scrub content — cinematic horizontal wipe */
+export function pinnedScrub(
+  pinEl: string | Element,
+  animateEl: string,
+  opts: TriggerOptions = {}
+) {
+  const { start = 'top top', end = '+=100%', scrub = 1 } = opts
+  return gsap.fromTo(
+    animateEl,
+    { xPercent: 0 },
+    {
+      xPercent:      -100,
+      ease:          'none',
+      scrollTrigger: { trigger: pinEl, pin: true, start, end, scrub },
     }
   )
 }
 
 /* ─── ScrollTrigger helpers ──────────────────────────────────────────── */
 
-/** Refresh all ScrollTrigger instances (call after dynamic content loads) */
 export function refreshScrollTrigger() {
   ScrollTrigger.refresh()
 }
 
-/** Kill all ScrollTrigger instances */
 export function killAll() {
   ScrollTrigger.getAll().forEach(t => t.kill())
 }

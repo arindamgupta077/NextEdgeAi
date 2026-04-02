@@ -52,17 +52,47 @@ export default function FAQ() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.faq-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.faq-heading', start: 'top 95%' } }
+      // Heading timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.faq-heading', start: 'top 84%' }
+      })
+      tl.fromTo('.faq-label',
+        { opacity: 0, y: 16, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
       )
+      .fromTo('.faq-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.faq-sub',
+        { opacity: 0, y: 28, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.6'
+      )
+      .fromTo('.faq-cta',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out' },
+        '-=0.5'
+      )
+
+      // FAQ items stagger from left
       gsap.fromTo('.faq-item',
-        { opacity: 0, x: -30 },
+        { opacity: 0, x: -45, filter: 'blur(4px)' },
         {
-          opacity: 1, x: 0, duration: 0.6, ease: 'power3.out',
-          stagger: 0.07,
-          scrollTrigger: { trigger: '.faq-list', start: 'top 95%' },
+          opacity: 1, x: 0, filter: 'blur(0px)',
+          duration: 0.75, ease: 'power4.out',
+          stagger: { amount: 0.65, from: 'start' },
+          scrollTrigger: { trigger: '.faq-list', start: 'top 86%' },
+        }
+      )
+
+      // Parallax bg blob
+      gsap.fromTo('.faq-bg-blob',
+        { yPercent: -15 },
+        {
+          yPercent: 15, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
         }
       )
     }, sectionRef)
@@ -73,24 +103,26 @@ export default function FAQ() {
     <section id="faq" ref={sectionRef} className="relative section-padding overflow-hidden">
       <div className="absolute inset-0 bg-[#06060c]" />
       <div className="absolute inset-0 grid-bg opacity-20" />
+      <div className="faq-bg-blob absolute top-1/2 left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.04) 0%, transparent 65%)' }} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container-narrow relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-16 items-start">
           {/* Sticky heading */}
           <div className="faq-heading lg:sticky lg:top-28">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
-              <span className="w-1 h-1 rounded-full bg-cyan-400" />
+            <div className="faq-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-cyan-400">
+              <span className="w-1 h-1 rounded-full bg-cyan-400 animate-pulse" />
               FAQ
             </div>
-            <h2 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-6">
+            <h2 className="faq-title opacity-0 text-2xl sm:text-4xl md:text-5xl font-black tracking-tight mb-6">
               Questions<br/>
               <span className="text-gradient">Answered.</span>
             </h2>
-            <p className="text-gray-400 leading-relaxed mb-8">
+            <p className="faq-sub opacity-0 text-gray-400 leading-relaxed mb-8">
               Everything you need to know before starting your first AI production project with us.
             </p>
-            <div className="flex flex-col gap-3">
+            <div className="faq-cta opacity-0 flex flex-col gap-3">
               <div className="flex items-center gap-3 text-sm text-gray-400">
                 <div className="w-8 h-8 rounded-full bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 text-xs">?</div>
                 Still have questions?

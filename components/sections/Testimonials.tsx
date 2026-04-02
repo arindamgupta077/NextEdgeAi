@@ -72,17 +72,40 @@ export default function Testimonials() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.testimonials-heading',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.testimonials-heading', start: 'top 95%' } }
+      // Cinematic heading entrance
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.testimonials-heading', start: 'top 86%' }
+      })
+      tl.fromTo('.testimonials-label',
+        { opacity: 0, y: 16, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo('.testimonials-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.testimonials-sub',
+        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.6'
       )
       gsap.fromTo('.testimonial-card',
-        { opacity: 0, y: 50, scale: 0.95 },
+        { opacity: 0, y: 65, scale: 0.92, filter: 'blur(6px)' },
         {
-          opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out',
-          stagger: 0.1,
-          scrollTrigger: { trigger: '.testimonials-grid', start: 'top 95%' },
+          opacity: 1, y: 0, scale: 1, filter: 'blur(0px)',
+          duration: 0.95, ease: 'power4.out',
+          stagger: { amount: 0.65, from: 'start' },
+          scrollTrigger: { trigger: '.testimonials-grid', start: 'top 88%' },
+        }
+      )
+
+      // Parallax center blob
+      gsap.fromTo('.testimonials-bg-blob',
+        { yPercent: -18 },
+        {
+          yPercent: 18, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2 },
         }
       )
     }, sectionRef)
@@ -93,22 +116,22 @@ export default function Testimonials() {
     <section id="testimonials" ref={sectionRef} className="relative section-padding overflow-hidden">
       <div className="absolute inset-0 bg-[#07070f]" />
       <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.05) 0%, transparent 70%)' }} />
+      <div className="testimonials-bg-blob absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.065) 0%, transparent 65%)' }} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="testimonials-heading text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-rose-400">
-            <span className="w-1 h-1 rounded-full bg-rose-400" />
+          <div className="testimonials-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-rose-400">
+            <span className="w-1 h-1 rounded-full bg-rose-400 animate-pulse" />
             Social Proof
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="testimonials-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             What Our Clients<br/>
             <span className="text-gradient">Have to Say</span>
           </h2>
-          <p className="max-w-md mx-auto text-gray-400 text-base sm:text-lg">
+          <p className="testimonials-sub opacity-0 max-w-md mx-auto text-gray-400 text-base sm:text-lg">
             Real results. Real relationships. Real stories from the brands we've helped transform.
           </p>
         </div>

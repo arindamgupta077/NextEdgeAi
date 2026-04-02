@@ -226,10 +226,42 @@ export default function AISuite() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.fromTo('.suite-intro',
-        { opacity: 0, y: 50 },
-        { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out',
-          scrollTrigger: { trigger: '.suite-intro', start: 'top 80%' } }
+      // Section entrance timeline
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: '.suite-intro', start: 'top 84%' }
+      })
+      tl.fromTo('.suite-label',
+        { opacity: 0, y: 16, scale: 0.9 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.7, ease: 'power3.out' }
+      )
+      .fromTo('.suite-title',
+        { opacity: 0, y: 70, skewY: 3, filter: 'blur(8px)' },
+        { opacity: 1, y: 0, skewY: 0, filter: 'blur(0px)', duration: 1.1, ease: 'power4.out' },
+        '-=0.35'
+      )
+      .fromTo('.suite-sub',
+        { opacity: 0, y: 30, filter: 'blur(4px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', duration: 0.9, ease: 'power3.out' },
+        '-=0.6'
+      )
+
+      // Tab buttons stagger
+      gsap.fromTo('.suite-tab',
+        { opacity: 0, y: 24, scale: 0.88 },
+        {
+          opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.4)',
+          stagger: { amount: 0.4 },
+          scrollTrigger: { trigger: '.suite-tabs', start: 'top 88%' },
+        }
+      )
+
+      // Parallax bg accent
+      gsap.fromTo('.suite-bg-blob',
+        { yPercent: -20 },
+        {
+          yPercent: 20, ease: 'none',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top bottom', end: 'bottom top', scrub: 2.5 },
+        }
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -240,34 +272,34 @@ export default function AISuite() {
   return (
     <section id="suite" ref={sectionRef} className="relative section-padding overflow-hidden">
       <div className="absolute inset-0 bg-[#06060c]" />
-      {/* Radial accent */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] rounded-full pointer-events-none"
-        style={{ background: `radial-gradient(ellipse, rgba(34,211,238,0.05) 0%, transparent 70%)` }} />
+      {/* Parallax radial accent */}
+      <div className="suite-bg-blob absolute top-1/3 left-1/2 -translate-x-1/2 w-[800px] h-[500px] rounded-full pointer-events-none will-change-transform"
+        style={{ background: 'radial-gradient(ellipse, rgba(34,211,238,0.055) 0%, transparent 65%)' }} />
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
       <div className="container-narrow relative z-10">
         {/* Heading */}
         <div className="suite-intro text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-indigo-400">
-            <span className="w-1 h-1 rounded-full bg-indigo-400" />
+          <div className="suite-label opacity-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-light mb-5 text-xs uppercase tracking-[0.18em] text-indigo-400">
+            <span className="w-1 h-1 rounded-full bg-indigo-400 animate-pulse" />
             Technology
           </div>
-          <h2 className="text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
+          <h2 className="suite-title opacity-0 text-2xl sm:text-4xl md:text-6xl font-black tracking-tight mb-6">
             The AI Production <span className="text-gradient">Suite</span>
           </h2>
-          <p className="max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
+          <p className="suite-sub opacity-0 max-w-xl mx-auto text-gray-400 text-base sm:text-lg">
             Four interconnected AI engines that cover every stage of cinematic creation —
             from the first word to the final frame.
           </p>
         </div>
 
         {/* Tab selector */}
-        <div className="flex flex-wrap justify-center gap-3 mb-14">
+        <div className="suite-tabs flex flex-wrap justify-center gap-3 mb-14">
           {FEATURES.map((f, i) => (
             <button
               key={f.id}
               onClick={() => setActive(i)}
-              className={`cursor-none px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
+              className={`suite-tab cursor-none px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-300 ${
                 active === i
                   ? 'text-white border border-white/20'
                   : 'text-gray-500 border border-white/5 hover:text-gray-300 hover:border-white/15'
@@ -284,10 +316,10 @@ export default function AISuite() {
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            initial={{ opacity: 0, y: 40, filter: 'blur(8px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, y: -30, filter: 'blur(6px)' }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
           >
             {/* Text */}
