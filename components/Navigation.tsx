@@ -160,10 +160,10 @@ export default function Navigation() {
             animate={{ opacity: 1, clipPath: 'inset(0 0 0% 0)' }}
             exit={{ opacity: 0, clipPath: 'inset(0 0 100% 0)' }}
             transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-[55] flex flex-col items-center justify-center"
+            className="fixed inset-0 z-[55] flex flex-col"
             style={{ background: 'rgba(6,6,12,0.97)', backdropFilter: 'blur(24px)' }}
           >
-            {/* Decorative orbs for mobile menu */}
+            {/* Decorative orbs */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
               <div className="absolute -top-32 -left-32 w-80 h-80 rounded-full"
                 style={{ background: 'radial-gradient(circle, rgba(34,211,238,0.06) 0%, transparent 70%)' }} />
@@ -171,32 +171,79 @@ export default function Navigation() {
                 style={{ background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)' }} />
             </div>
 
-            <div className="relative flex flex-col items-center gap-5 w-full px-6 sm:px-10">
+            {/* Top bar with close button */}
+            <div className="relative flex items-center justify-between px-6 pt-5 pb-2">
+              <span className="text-xs uppercase tracking-[0.2em] text-gray-500 font-medium">Menu</span>
+              <motion.button
+                initial={{ opacity: 0, scale: 0.7 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+                onClick={() => setMenuOpen(false)}
+                aria-label="Close menu"
+                className="flex items-center justify-center w-10 h-10 rounded-full border border-white/10
+                           bg-white/5 hover:bg-white/10 hover:border-white/20 transition-all duration-200 cursor-pointer"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"
+                  className="text-gray-300">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </motion.button>
+            </div>
+
+            {/* Nav links */}
+            <div className="relative flex flex-col justify-center flex-1 w-full px-6 sm:px-10 gap-1">
               {navLinks.map((link, i) => (
                 <motion.button
                   key={link.label}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.12 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                   onClick={() => handleNavClick(link.href, link.isPage)}
-                  className="w-full text-center text-2xl sm:text-3xl md:text-4xl font-light text-gray-300 hover:text-white
-                             transition-colors tracking-wide py-3 border-b border-white/5"
+                  className="group flex items-center justify-between w-full text-left text-2xl sm:text-3xl font-light
+                             text-gray-400 hover:text-white transition-colors duration-200 tracking-wide
+                             py-4 border-b border-white/5 last:border-b-0"
                 >
-                  {link.label}
+                  <span className="flex items-center gap-4">
+                    <span className="text-xs text-gray-600 font-mono w-5 text-right select-none">
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    {link.label}
+                  </span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                    fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                    className="text-gray-600 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all duration-200 shrink-0">
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
                 </motion.button>
               ))}
+            </div>
+
+            {/* CTA at bottom */}
+            <div className="relative px-6 sm:px-10 pb-10 pt-4">
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + navLinks.length * 0.07 }}
+                transition={{ delay: 0.12 + navLinks.length * 0.07 }}
                 onClick={() => {
                   setMenuOpen(false)
                   window.dispatchEvent(new CustomEvent('open-contact-modal'))
                 }}
-                className="mt-6 px-8 sm:px-10 py-3 sm:py-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white
-                           rounded-full text-lg sm:text-xl font-medium"
+                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-indigo-500 text-white
+                           rounded-2xl text-lg font-medium tracking-wide hover:opacity-90 transition-opacity cursor-pointer"
               >
                 Start a Project
+              </motion.button>
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.12 + navLinks.length * 0.07 + 0.08 }}
+                onClick={() => setMenuOpen(false)}
+                className="w-full mt-3 py-3 text-sm text-gray-500 hover:text-gray-300 transition-colors cursor-pointer"
+              >
+                Close Menu
               </motion.button>
             </div>
           </motion.div>
