@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
@@ -27,7 +27,7 @@ type Project = {
 const CARDS_PER_PAGE = 9
 
 /* ─── Page ──────────────────────────────────────────────────────────── */
-export default function PortfolioPage() {
+function PortfolioContent() {
   const searchParams   = useSearchParams()
   const [projects,     setProjects]     = useState<Project[]>([])
   const [categories,   setCategories]   = useState<string[]>(['All'])
@@ -365,5 +365,13 @@ export default function PortfolioPage() {
         )}
       </AnimatePresence>
     </>
+  )
+}
+
+export default function PortfolioPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#06060c]" />}>
+      <PortfolioContent />
+    </Suspense>
   )
 }
