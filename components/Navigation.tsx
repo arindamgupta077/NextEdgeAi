@@ -94,7 +94,7 @@ export default function Navigation() {
               <button
                 key={link.label}
                 onClick={() => handleNavClick(link.href, link.isPage)}
-                className={`relative px-4 py-2 text-sm rounded-lg transition-all duration-300 cursor-none ${
+                className={`relative px-4 py-2 text-sm rounded-lg transition-all duration-300 cursor-pointer ${
                   activeLink === link.href
                     ? 'text-white'
                     : 'text-gray-400 hover:text-white'
@@ -116,7 +116,7 @@ export default function Navigation() {
           <div className="hidden md:flex items-center gap-3">
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('open-contact-modal'))}
-              className="cursor-none group relative px-5 py-2.5 text-sm font-medium rounded-full overflow-hidden transition-all duration-300"
+              className="cursor-pointer group relative px-5 py-2.5 text-sm font-medium rounded-full overflow-hidden transition-all duration-300"
             >
               <span className="absolute inset-0 border border-cyan-400/40 rounded-full group-hover:border-cyan-400/80 transition-colors duration-300" />
               <span className="absolute inset-0 bg-cyan-400/0 group-hover:bg-cyan-400/8 rounded-full transition-colors duration-300" />
@@ -128,7 +128,7 @@ export default function Navigation() {
 
           {/* Mobile burger */}
           <button
-            className="md:hidden relative z-[60] flex flex-col gap-[5px] cursor-none p-2"
+            className="md:hidden relative z-[60] flex flex-col gap-[5px] cursor-pointer p-2"
             onClick={() => setMenuOpen(!menuOpen)}
             aria-label="Toggle menu"
             aria-expanded={menuOpen}

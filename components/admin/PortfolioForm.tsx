@@ -6,12 +6,6 @@ import { createClient } from '@/lib/supabase/client'
 import { extractYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
 import type { PortfolioProject } from '@/types/database'
 
-/* ─── Constants ──────────────────────────────────────────────────── */
-const CATEGORIES = [
-  'AI Feature Film', 'Brand Campaign', 'Web Series', 'Digital Commercial',
-  'Virtual Production', 'IP Development', 'Micro-Drama', 'Documentary', 'Other',
-]
-
 const THEMES = [
   { id: 'cyan',    name: 'Cyan / Blue',     gradient: 'from-cyan-900/80 via-blue-900/60 to-[#0a0a18]',    accent: '#22d3ee' },
   { id: 'indigo',  name: 'Indigo / Purple', gradient: 'from-indigo-900/80 via-purple-900/60 to-[#0a0a18]', accent: '#818cf8' },
@@ -37,9 +31,36 @@ export default function PortfolioForm({ initialData, onSuccess }: Props) {
   const isEdit    = !!initialData
   const fileRef   = useRef<HTMLInputElement>(null)
 
+  // Categories fetched from services
+  const [categories, setCategories] = useState<string[]>([])
+
+  useEffect(() => {
+    const supabase = createClient()
+    supabase
+      .from('services')
+      .select('title')
+      .eq('is_active', true)
+      .order('display_order', { ascending: true })
+      .then(({ data }) => {
+        if (data && data.length > 0) {
+          const titles = data.map((s: { title: string }) => s.title)
+          // If editing and the existing category isn't a current service title,
+          // prepend it so the admin can always see and reassign it.
+          const existingCat = initialData?.category
+          const merged =
+            existingCat && !titles.includes(existingCat)
+              ? [existingCat, ...titles]
+              : titles
+          setCategories(merged)
+          // Set default for new projects once services are loaded
+          if (!initialData) setCategory(titles[0])
+        }
+      })
+  }, [])
+
   // Form state
   const [title,    setTitle]    = useState(initialData?.title    ?? '')
-  const [category, setCategory] = useState(initialData?.category ?? 'AI Feature Film')
+  const [category, setCategory] = useState(initialData?.category ?? '')
   const [year,     setYear]     = useState(initialData?.year     ?? String(new Date().getFullYear()))
   const [desc,     setDesc]     = useState(initialData?.description ?? '')
   const [tagsStr,  setTagsStr]  = useState((initialData?.tags ?? []).join(', '))
@@ -187,7 +208,10 @@ export default function PortfolioForm({ initialData, onSuccess }: Props) {
         <div>
           <label className="admin-label">Category</label>
           <select value={category} onChange={e => setCategory(e.target.value)} className="admin-input">
-            {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            {categories.length === 0 && (
+              <option value="" disabled>Loading services…</option>
+            )}
+            {categories.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
         </div>
       </div>
