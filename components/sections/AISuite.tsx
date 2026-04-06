@@ -209,7 +209,7 @@ const FEATURES = [
     title:   'Script Intelligence',
     sub:     'AI-powered narrative analysis',
     desc:    'Our proprietary NLP engine dissects your screenplay page by page — detecting structural dead zones, emotional flat-lines, and untapped commercial signals. It delivers precise, scene-by-scene rewrites that sharpen tension, deepen character motivation, and maximise audience retention before a single frame rolls.',
-    bullets: ['AI-powered script coverage', 'Emotional arc & beat mapping', 'Genre tone & voice calibration'],
+    bullets: ['AI-powered script coverage', 'Emotional arc & beat mapping', 'Genre tone & voice calibration', 'Health report analysis of script/story'],
     accent:  '#22d3ee',
     visual: (
       <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 p-5 flex flex-col gap-3">

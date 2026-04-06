@@ -36,7 +36,7 @@ const TESTIMONIALS = [
     accent:  '#818cf8',
   },
   {
-    quote:   "The Virtual Production environment they built for 'Aurora' was breathtaking — you'd never know it wasn't Iceland. Our engagement rates tripled compared to our previous fragrance campaign.",
+    quote:   "The AI-generated visuals NextEdgeAI produced for 'Aurora' were absolutely stunning — cinematic, emotionally rich, and completely on-brand. Our engagement rates tripled compared to our previous campaign.",
     name:    'Rohan Desai',
     role:    'VP Brand Experience',
     company: 'Celestiq Parfums',
