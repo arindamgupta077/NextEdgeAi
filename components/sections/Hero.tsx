@@ -467,9 +467,9 @@ export default function Hero() {
         {/* Mini stats */}
         <div className="hero-stats flex flex-wrap items-center justify-center gap-4 sm:gap-8 md:gap-14">
           {[
-            { end: 500, suffix: '+', label: 'Projects Delivered' },
-            { end: 98,  suffix: '%', label: 'Client Satisfaction' },
-            { end: 50,  suffix: '+', label: 'Global Awards' },
+            { end: 20,  suffix: '+', label: 'Projects Delivered' },
+            { end: 99,  suffix: '%', label: 'Client Satisfaction' },
+            { end: 2,   suffix: '+', label: 'Global Awards' },
           ].map((s) => (
             <div key={s.label} className="stat-item opacity-0 flex flex-col items-center gap-1">
               <span className="text-2xl md:text-3xl font-black text-gradient">

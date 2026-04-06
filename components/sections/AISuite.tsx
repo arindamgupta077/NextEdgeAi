@@ -113,13 +113,13 @@ const FEATURES = [
     label:   '01',
     title:   'Script Intelligence',
     sub:     'AI-powered narrative analysis',
-    desc:    'Our proprietary NLP engine reads your screenplay, identifies pacing issues, character arc gaps, and market viability signals — then offers scene-by-scene rewrites to strengthen narrative tension and audience retention.',
-    bullets: ['Automated script coverage', 'Character emotion mapping', 'Genre tone calibration', 'Market comparison analysis'],
+    desc:    'Our proprietary NLP engine dissects your screenplay page by page — detecting structural dead zones, emotional flat-lines, and untapped commercial signals. It delivers precise, scene-by-scene rewrites that sharpen tension, deepen character motivation, and maximise audience retention before a single frame rolls.',
+    bullets: ['AI-powered script coverage', 'Emotional arc & beat mapping', 'Genre tone & voice calibration', 'Competitive market comp analysis'],
     accent:  '#22d3ee',
     visual: (
       <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 p-6">
         <div className="space-y-3">
-          {['INT. NEXUS LAB — NIGHT', '  ARIA:', '    "The model is learning faster than we', '     anticipated. It\'s rewriting itself."', 'Beat. A long silence.', '  DIRECTOR:', '    "How much faster?"'].map((line, i) => (
+          {['INT. NEXUS LAB — 2:47 AM', '  ARIA', '    "It didn\'t learn from us.', '     It learned from our silence."', 'A long beat. The cursor blinks.', '  DIRECTOR', '    "Can we shut it down?"'].map((line, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -204,12 +204,29 @@ const FEATURES = [
     accent:  '#f472b6',
     visual: (
       <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 flex items-center justify-center">
-        <div className="grid grid-cols-3 gap-4 p-6 w-full">
-          {['Frame 001', 'Frame 048', 'Frame 120'].map((f, i) => (
-            <div key={f} className="aspect-[3/4] rounded-xl bg-gradient-to-b from-pink-900/30 to-[#0a0a18] border border-white/8 flex flex-col items-center justify-end pb-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-pink-400/20 to-purple-400/20 mb-2 border border-white/10" />
-              <span className="text-[9px] text-gray-500">{f}</span>
-            </div>
+        <div className="grid grid-cols-3 gap-3 p-4 w-full h-full">
+          {[
+            { label: 'Wide Shot',  src: '/Wide Shot.png' },
+            { label: 'Mid Shot',   src: '/Mid Shot.png' },
+            { label: 'Close Shot', src: '/Close Shot.png' },
+          ].map((shot, i) => (
+            <motion.div
+              key={shot.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.15, duration: 0.5 }}
+              className="relative rounded-xl overflow-hidden border border-white/10 group"
+            >
+              <img
+                src={shot.src}
+                alt={shot.label}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <span className="absolute bottom-1.5 left-0 right-0 text-center text-[9px] text-white/70 uppercase tracking-widest font-medium">
+                {shot.label}
+              </span>
+            </motion.div>
           ))}
         </div>
         <div className="absolute top-4 right-4 glass-light rounded-xl px-3 py-2 text-xs text-pink-400">

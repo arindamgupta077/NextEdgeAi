@@ -8,7 +8,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 const STATS = [
   {
-    value:  500,
+    value:  20,
     suffix: '+',
     label:  'Projects Delivered',
     sub:    'Across film, ads & digital',
@@ -16,7 +16,7 @@ const STATS = [
     bg:     'from-cyan-500/10 to-transparent',
   },
   {
-    value:  98,
+    value:  99,
     suffix: '%',
     label:  'Client Satisfaction',
     sub:    'Average across all engagements',
@@ -24,7 +24,7 @@ const STATS = [
     bg:     'from-indigo-500/10 to-transparent',
   },
   {
-    value:  50,
+    value:  2,
     suffix: '+',
     label:  'International Awards',
     sub:    'Cannes, Clio, D&AD & more',

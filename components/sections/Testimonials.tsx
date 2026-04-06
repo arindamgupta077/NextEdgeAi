@@ -202,9 +202,9 @@ export default function Testimonials() {
         {/* Trust indicators */}
         <div className="mt-14 flex flex-wrap items-center justify-center gap-8">
           {[
-            { label: 'Verified Reviews', value: '500+', icon: '✓' },
+            { label: 'Verified Reviews', value: '14+', icon: '✓' },
             { label: 'Net Promoter Score', value: '94', icon: '↑' },
-            { label: 'Repeat Client Rate', value: '87%', icon: '⟳' },
+            { label: 'Repeat Client Rate', value: '95%', icon: '⟳' },
           ].map((item) => (
             <div key={item.label} className="flex items-center gap-3 text-sm">
               <span className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-cyan-400 font-bold">
