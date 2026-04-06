@@ -109,33 +109,42 @@ function VisualGenesisGrid() {
 
 const FEATURES = [
   {
-    id:      'script',
+    id:      'character',
     label:   '01',
-    title:   'Script Intelligence',
-    sub:     'AI-powered narrative analysis',
-    desc:    'Our proprietary NLP engine dissects your screenplay page by page — detecting structural dead zones, emotional flat-lines, and untapped commercial signals. It delivers precise, scene-by-scene rewrites that sharpen tension, deepen character motivation, and maximise audience retention before a single frame rolls.',
-    bullets: ['AI-powered script coverage', 'Emotional arc & beat mapping', 'Genre tone & voice calibration', 'Competitive market comp analysis'],
-    accent:  '#22d3ee',
+    title:   'Deep Character',
+    sub:     'AI actor simulation',
+    desc:    'Create photorealistic synthetic performers or enhance real talent with AI. Our Deep Character system delivers consistent facial performance, emotional nuance, and age/appearance transformations — fully non-destructive and ethically licensed.',
+    bullets: ['Synthetic actor generation', 'Facial performance transfer', 'Age-range transformation', 'Ethical licence framework'],
+    accent:  '#f472b6',
     visual: (
-      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 p-6">
-        <div className="space-y-3">
-          {['INT. NEXUS LAB — 2:47 AM', '  ARIA', '    "It didn\'t learn from us.', '     It learned from our silence."', 'A long beat. The cursor blinks.', '  DIRECTOR', '    "Can we shut it down?"'].map((line, i) => (
-            <motion.div key={i}
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
+      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 flex items-center justify-center">
+        <div className="grid grid-cols-3 gap-3 p-4 w-full h-full">
+          {[
+            { label: 'Wide Shot',  src: '/Wide Shot.png' },
+            { label: 'Mid Shot',   src: '/Mid Shot.png' },
+            { label: 'Close Shot', src: '/Close Shot.png' },
+          ].map((shot, i) => (
+            <motion.div
+              key={shot.label}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.15, duration: 0.5 }}
-              className={`font-mono text-xs leading-relaxed ${
-                line.startsWith('  ') ? 'text-cyan-300' : 'text-gray-400'
-              } ${line.startsWith('INT') ? 'text-amber-300 font-semibold' : ''}`}
+              className="relative rounded-xl overflow-hidden border border-white/10 group"
             >
-              {line}
+              <img
+                src={shot.src}
+                alt={shot.label}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <span className="absolute bottom-1.5 left-0 right-0 text-center text-[9px] text-white/70 uppercase tracking-widest font-medium">
+                {shot.label}
+              </span>
             </motion.div>
           ))}
         </div>
-        {/* AI score overlay */}
-        <div className="absolute bottom-4 right-4 glass-light rounded-xl p-3 text-xs">
-          <div className="text-gray-400 mb-1">Tension Score</div>
-          <div className="text-2xl font-black text-cyan-400">9.2<span className="text-xs text-gray-500">/10</span></div>
+        <div className="absolute top-4 right-4 glass-light rounded-xl px-3 py-2 text-xs text-pink-400">
+          ● Deep Character Active
         </div>
       </div>
     ),
@@ -195,42 +204,68 @@ const FEATURES = [
     ),
   },
   {
-    id:      'character',
+    id:      'script',
     label:   '04',
-    title:   'Deep Character',
-    sub:     'AI actor simulation',
-    desc:    'Create photorealistic synthetic performers or enhance real talent with AI. Our Deep Character system delivers consistent facial performance, emotional nuance, and age/appearance transformations — fully non-destructive and ethically licensed.',
-    bullets: ['Synthetic actor generation', 'Facial performance transfer', 'Age-range transformation', 'Ethical licence framework'],
-    accent:  '#f472b6',
+    title:   'Script Intelligence',
+    sub:     'AI-powered narrative analysis',
+    desc:    'Our proprietary NLP engine dissects your screenplay page by page — detecting structural dead zones, emotional flat-lines, and untapped commercial signals. It delivers precise, scene-by-scene rewrites that sharpen tension, deepen character motivation, and maximise audience retention before a single frame rolls.',
+    bullets: ['AI-powered script coverage', 'Emotional arc & beat mapping', 'Genre tone & voice calibration'],
+    accent:  '#22d3ee',
     visual: (
-      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 flex items-center justify-center">
-        <div className="grid grid-cols-3 gap-3 p-4 w-full h-full">
-          {[
-            { label: 'Wide Shot',  src: '/Wide Shot.png' },
-            { label: 'Mid Shot',   src: '/Mid Shot.png' },
-            { label: 'Close Shot', src: '/Close Shot.png' },
-          ].map((shot, i) => (
-            <motion.div
-              key={shot.label}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.15, duration: 0.5 }}
-              className="relative rounded-xl overflow-hidden border border-white/10 group"
-            >
-              <img
-                src={shot.src}
-                alt={shot.label}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              <span className="absolute bottom-1.5 left-0 right-0 text-center text-[9px] text-white/70 uppercase tracking-widest font-medium">
-                {shot.label}
-              </span>
-            </motion.div>
-          ))}
+      <div className="relative w-full h-72 rounded-2xl overflow-hidden bg-[#0a0a18] border border-white/8 p-5 flex flex-col gap-3">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">AI Script Analysis</span>
+          <span className="text-[10px] text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded-full">Live</span>
         </div>
-        <div className="absolute top-4 right-4 glass-light rounded-xl px-3 py-2 text-xs text-pink-400">
-          ● Deep Character Active
+
+        {/* Narrative arc bar */}
+        <div>
+          <div className="flex justify-between text-[9px] text-gray-500 mb-1">
+            <span>Narrative Arc</span><span className="text-cyan-400">Act II — Rising Tension</span>
+          </div>
+          <div className="w-full h-2 bg-white/5 rounded-full overflow-hidden">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: '62%' }}
+              transition={{ duration: 1.2, ease: 'easeOut', delay: 0.2 }}
+              className="h-full bg-gradient-to-r from-cyan-500 to-indigo-500 rounded-full"
+            />
+          </div>
+        </div>
+
+        {/* Emotion heat row */}
+        <div>
+          <div className="text-[9px] text-gray-500 mb-1.5">Emotional Beat Map — Scenes 1–12</div>
+          <div className="flex gap-1">
+            {[40, 55, 45, 70, 60, 85, 75, 90, 68, 95, 80, 100].map((v, i) => (
+              <motion.div
+                key={i}
+                initial={{ scaleY: 0 }}
+                animate={{ scaleY: 1 }}
+                transition={{ delay: i * 0.07, duration: 0.4, ease: 'easeOut' }}
+                style={{ originY: 1, height: `${v * 0.36}px`, background: `hsl(${190 - v * 0.7}, 80%, ${40 + v * 0.2}%)` }}
+                className="flex-1 rounded-sm"
+              />
+            ))}
+          </div>
+          <div className="flex justify-between text-[8px] text-gray-600 mt-1">
+            <span>Sc. 1</span><span>Sc. 6</span><span>Sc. 12</span>
+          </div>
+        </div>
+
+        {/* Metrics row */}
+        <div className="grid grid-cols-3 gap-2 mt-auto">
+          {[
+            { label: 'Pacing Score', value: '8.4', color: 'text-cyan-400' },
+            { label: 'Arc Strength', value: '91%', color: 'text-indigo-400' },
+            { label: 'Conflict Density', value: 'High', color: 'text-amber-400' },
+          ].map((m) => (
+            <div key={m.label} className="glass-light rounded-xl p-2 text-center">
+              <div className={`text-base font-black ${m.color}`}>{m.value}</div>
+              <div className="text-[8px] text-gray-500 mt-0.5">{m.label}</div>
+            </div>
+          ))}
         </div>
       </div>
     ),
