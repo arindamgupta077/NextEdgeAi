@@ -4,35 +4,34 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
-const FOOTER_LINKS = {
+const FOOTER_LINKS: Record<string, { label: string; href: string }[]> = {
   Services: [
-    'AI Film Production',
-    'Advertising Campaigns',
-    'Digital Commercials',
-    'Virtual Production',
-    'Micro-Dramas',
-    'Visual World-Building',
-    'IP Development',
-    'Storytelling Universes',
+    { label: 'AI Film Production', href: '/#services' },
+    { label: 'Advertising Campaigns', href: '/#services' },
+    { label: 'Digital Commercials', href: '/#services' },
+    { label: 'Virtual Production', href: '/#services' },
+    { label: 'Micro-Dramas', href: '/#services' },
+    { label: 'Visual World-Building', href: '/#services' },
+    { label: 'IP Development', href: '/#services' },
+    { label: 'Storytelling Universes', href: '/#services' },
   ],
   Work: [
-    'Portfolio',
-    'Case Studies',
-    'Featured Projects',
-    'Behind the Scenes',
+    { label: 'Portfolio', href: '/portfolio' },
+    { label: 'Case Studies', href: '/case-studies' },
+    { label: 'Featured Projects', href: '/portfolio' },
+    { label: 'Behind the Scenes', href: '/portfolio' },
   ],
   Studio: [
-    'About NextEdgeAI',
-    'Our Technology',
-    'Creative Team',
-    'Careers',
-    'Press & Media',
+    { label: 'About NextEdgeAI', href: '/about' },
+    { label: 'Our Technology', href: '/technology' },
+    { label: 'Creative Team', href: '/team' },
+    { label: 'Careers', href: '/careers' },
   ],
   Legal: [
-    'Privacy Policy',
-    'Terms of Service',
-    'IP Charter',
-    'Cookie Settings',
+    { label: 'Privacy Policy', href: '/privacy-policy' },
+    { label: 'Terms of Service', href: '/terms-of-service' },
+    { label: 'IP Charter', href: '/ip-charter' },
+    { label: 'Cookie Settings', href: '/cookie-settings' },
   ],
 }
 
@@ -161,13 +160,13 @@ export default function Footer() {
                 <h4 className="text-xs uppercase tracking-[0.18em] text-gray-500 mb-4">{heading}</h4>
                 <ul className="space-y-2.5">
                   {links.map((link) => (
-                    <li key={link}>
-                      <button
-                        onClick={() => scrollTo('services')}
-                        className="cursor-none text-sm text-gray-500 hover:text-white transition-colors duration-200 text-left"
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="cursor-none text-sm text-gray-500 hover:text-white transition-colors duration-200"
                       >
-                        {link}
-                      </button>
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -178,12 +177,12 @@ export default function Footer() {
           {/* Bottom bar */}
           <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p className="text-xs text-gray-600">
-              © {currentYear} NextEdgeAI. All rights reserved. Crafted with AI & Human Creativity.
+              © {currentYear} NextEdgeAI. All rights reserved. Crafted with Creativity by StackLabs.in
             </p>
             <div className="flex items-center gap-6 text-xs text-gray-700">
-              <button className="cursor-none hover:text-gray-400 transition-colors">Privacy</button>
-              <button className="cursor-none hover:text-gray-400 transition-colors">Terms</button>
-              <button className="cursor-none hover:text-gray-400 transition-colors">Cookies</button>
+              <Link href="/privacy-policy" className="cursor-none hover:text-gray-400 transition-colors">Privacy</Link>
+              <Link href="/terms-of-service" className="cursor-none hover:text-gray-400 transition-colors">Terms</Link>
+              <Link href="/cookie-settings" className="cursor-none hover:text-gray-400 transition-colors">Cookies</Link>
             </div>
           </div>
         </div>

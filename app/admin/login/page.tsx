@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
                 autoComplete="email"
                 className="w-full bg-white/[0.06] border border-white/[0.08] rounded-xl px-4 py-3 text-sm text-white [color-scheme:dark]
                            placeholder:text-white/30 outline-none focus:border-cyan-400/50 focus:ring-2 focus:ring-cyan-400/10 transition"
-                placeholder="admin@nextedgeai.com"
+                placeholder="admin@nextedge.ai"
               />
             </div>
 

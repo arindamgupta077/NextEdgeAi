@@ -201,6 +201,19 @@ export default function InquiryDetailPage() {
             </svg>
             Reply via Email
           </a>
+
+          <button
+            onClick={async () => {
+              if (!confirm('Delete this inquiry? This cannot be undone.')) return
+              const supabase = createClient()
+              await supabase.from('contact_submissions').delete().eq('id', inquiry.id)
+              router.push('/admin/inquiries')
+            }}
+            className="w-full py-2.5 rounded-xl text-xs font-medium text-gray-600 border border-white/5
+                       hover:text-red-400 hover:border-red-400/20 transition-all"
+          >
+            Delete Inquiry
+          </button>
         </div>
       </div>
     </div>

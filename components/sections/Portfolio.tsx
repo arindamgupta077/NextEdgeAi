@@ -156,7 +156,7 @@ export default function Portfolio() {
         {/* Project grid */}
         <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 auto-rows-[220px] sm:auto-rows-[260px] lg:auto-rows-[280px] gap-4 sm:gap-5">
           <AnimatePresence>
-            {visible.map((project) => (
+            {visible.slice(0, 9).map((project) => (
               <motion.div
                 key={project.id}
                 layout

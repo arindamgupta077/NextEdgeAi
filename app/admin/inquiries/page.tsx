@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import type { ContactSubmission, ContactStatus } from '@/types/database'
@@ -28,21 +28,32 @@ export default function InquiriesPage() {
   const [inquiries, setInquiries] = useState<ContactSubmission[]>([])
   const [loading,   setLoading]   = useState(true)
   const [filter,    setFilter]    = useState<ContactStatus | 'all'>('all')
+  const [deleting,  setDeleting]  = useState<string | null>(null)
+  const [confirm,   setConfirm]   = useState<string | null>(null)
 
-  useEffect(() => {
+  const load = useCallback(async () => {
+    setLoading(true)
     const supabase = createClient()
     let query = supabase
       .from('contact_submissions')
       .select('*')
       .order('created_at', { ascending: false })
-
     if (filter !== 'all') query = query.eq('status', filter)
-
-    query.then(({ data }) => {
-      setInquiries(data ?? [])
-      setLoading(false)
-    })
+    const { data } = await query
+    setInquiries(data ?? [])
+    setLoading(false)
   }, [filter])
+
+  useEffect(() => { load() }, [load])
+
+  const handleDelete = async (id: string) => {
+    setDeleting(id)
+    const supabase = createClient()
+    await supabase.from('contact_submissions').delete().eq('id', id)
+    setConfirm(null)
+    setDeleting(null)
+    load()
+  }
 
   const displayed = inquiries
 
@@ -93,7 +104,7 @@ export default function InquiriesPage() {
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden md:table-cell">Budget</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium">Status</th>
                 <th className="px-5 py-3 text-left text-xs uppercase tracking-widest text-gray-600 font-medium hidden lg:table-cell">Date</th>
-                <th className="px-5 py-3 w-16" />
+                <th className="px-5 py-3 w-36" />
               </tr>
             </thead>
             <tbody>
@@ -114,11 +125,37 @@ export default function InquiriesPage() {
                   <td className="px-5 py-3.5 text-gray-600 text-xs hidden lg:table-cell">
                     {new Date(inq.created_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                   </td>
-                  <td className="px-5 py-3.5 text-right">
-                    <Link href={`/admin/inquiries/${inq.id}`}
-                      className="text-xs text-cyan-400/70 hover:text-cyan-400 transition-colors">
-                      View →
-                    </Link>
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3 justify-end">
+                      <Link href={`/admin/inquiries/${inq.id}`}
+                        className="text-xs text-cyan-400/70 hover:text-cyan-400 transition-colors">
+                        View →
+                      </Link>
+                      {confirm === inq.id ? (
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleDelete(inq.id)}
+                            disabled={deleting === inq.id}
+                            className="text-xs text-red-400 hover:text-red-300 disabled:opacity-50 transition-colors"
+                          >
+                            {deleting === inq.id ? 'Deleting…' : 'Confirm'}
+                          </button>
+                          <button
+                            onClick={() => setConfirm(null)}
+                            className="text-xs text-gray-600 hover:text-gray-400 transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setConfirm(inq.id)}
+                          className="text-xs text-gray-600 hover:text-red-400 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -32,7 +32,7 @@ const STATS = [
     bg:     'from-amber-500/10 to-transparent',
   },
   {
-    value:  12,
+    value:  5,
     suffix: '+',
     label:  'Countries Served',
     sub:    'Global creative presence',

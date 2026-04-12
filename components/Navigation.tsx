@@ -11,6 +11,7 @@ const navLinks = [
   { label: 'AI Suite',     href: '#suite',          isPage: false },
   { label: 'Portfolio',    href: '#portfolio',      isPage: false },
   { label: 'Case Studies', href: '/case-studies',   isPage: true  },
+  { label: 'Careers',      href: '/careers',        isPage: true  },
   { label: 'Contact',      href: '#contact',        isPage: false },
 ]
 

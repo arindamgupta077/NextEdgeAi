@@ -1,5 +1,12 @@
 // ── TypeScript types mirroring the Supabase schema ───────────────────────────
 
+export interface Department {
+  id:         string
+  name:       string
+  created_at: string
+  updated_at: string
+}
+
 export interface PortfolioProject {
   id:            string
   title:         string
@@ -64,6 +71,51 @@ export interface Client {
   logo_url:      string | null
   display_order: number
   is_active:     boolean
+  created_at:    string
+  updated_at:    string
+}
+
+export interface TeamMember {
+  id:            string
+  name:          string
+  role:          string
+  department:    string
+  bio:           string
+  display_order: number
+  is_active:     boolean
+  created_at:    string
+  updated_at:    string
+}
+
+export interface CareerRole {
+  id:           string
+  title:        string
+  department:   string
+  location:     string
+  type:         string
+  description:  string
+  requirements: string[]
+  is_active:    boolean
+  display_order: number
+  created_at:   string
+  updated_at:   string
+}
+
+export type ApplicationStatus = 'new' | 'reviewed' | 'shortlisted' | 'rejected' | 'archived'
+
+export interface CareerApplication {
+  id:            string
+  role_id:       string | null
+  role_title:    string
+  department:    string
+  name:          string
+  email:         string
+  phone:         string | null
+  linkedin_url:  string | null
+  portfolio_url: string | null
+  cover_letter:  string | null
+  status:        ApplicationStatus
+  notes:         string | null
   created_at:    string
   updated_at:    string
 }

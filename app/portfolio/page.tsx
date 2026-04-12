@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback, Suspense } from 'react'
+import { useEffect, useRef, useState, useCallback, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
@@ -36,6 +36,7 @@ function PortfolioContent() {
   const [loading,      setLoading]      = useState(true)
   const [selected,     setSelected]     = useState<Project | null>(null)
   const [youtubeModal, setYoutubeModal] = useState<string | null>(null)
+  const gridRef = useRef<HTMLDivElement>(null)
 
   /* Fetch all projects */
   useEffect(() => {
@@ -68,6 +69,13 @@ function PortfolioContent() {
 
   /* Reset to page 1 when filter changes */
   useEffect(() => { setPage(1) }, [filter])
+
+  /* Scroll to grid top on page change */
+  useEffect(() => {
+    if (gridRef.current) {
+      gridRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
+  }, [page])
 
   const filtered    = filter === 'All' ? projects : projects.filter(p => p.category === filter)
   const totalPages  = Math.ceil(filtered.length / CARDS_PER_PAGE)
@@ -138,7 +146,7 @@ function PortfolioContent() {
         </div>
 
         {/* ── Grid ── */}
-        <div className="container-narrow">
+        <div ref={gridRef} className="container-narrow" style={{ scrollMarginTop: '6rem' }}>
           {loading ? (
             /* Skeleton placeholders */
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
